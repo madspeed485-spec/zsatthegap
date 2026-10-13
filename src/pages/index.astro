@@ -4,6 +4,7 @@ import { event } from '../config';
 import hero from '../images/hero.png';
 const imgs = Object.values(import.meta.glob<{ default: ImageMetadata }>('../images/gallery/*.{jpg,jpeg,png,webp}', { eager: true })).map(m => m.default);
 const gallery = [hero, ...imgs];
+const fbIcon = `<svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" aria-hidden="true"><path d="M24 12a12 12 0 1 0-13.9 11.9v-8.4H7.1V12h3V9.4c0-3 1.8-4.7 4.5-4.7 1.3 0 2.7.2 2.7.2v3h-1.5c-1.5 0-2 .9-2 1.9V12h3.4l-.5 3.5h-2.9v8.4A12 12 0 0 0 24 12z"/></svg>`;
 ---
 <html lang="en">
 <head>
@@ -13,7 +14,7 @@ const gallery = [hero, ...imgs];
 <meta name="description" content={`${event.name}: the yearly Nissan Z car event at the Tail of the Dragon, Deals Gap.`} />
 </head>
 <body>
-<nav><a href="#top" class="brand">Zs<span>@</span>the Gap</a><div><a href="#event">Event</a><a href="#stay">Stay</a><a href="#gallery">Gallery</a><a href="#contact">Contact</a></div></nav>
+<nav><a href="#top" class="brand">Zs<span>@</span>the Gap</a><div><a href="#event">Event</a><a href="#stay">Stay</a><a href="#gallery">Gallery</a><a href="#contact">Contact</a><a class="fb" href={event.facebookUrl} target="_blank" rel="noopener" aria-label="Facebook group" set:html={fbIcon} /></div></nav>
 <div class="banner"><Image src={hero} alt="Z at the Gap, Fontana Village, Oct 1-3, 2027" widths={[600, 900, 1200]} sizes="100vw" loading="eager" fetchpriority="high" /></div>
 <header id="top" class="hero">
   <p class="kicker">Nissan Z · 318 curves · one weekend</p>
@@ -42,9 +43,10 @@ const gallery = [hero, ...imgs];
 </div></section>
 <section id="contact" class="alt"><h2>Questions?</h2>
 <p>Email us at <a href={`mailto:${event.contactEmail}`}>{event.contactEmail}</a></p>
-<a class="btn" href={`mailto:${event.contactEmail}?subject=Zs%20at%20the%20Gap`}>Email Us</a></section>
+<a class="btn" href={`mailto:${event.contactEmail}?subject=Zs%20at%20the%20Gap`}>Email Us</a>
+<a class="btn btn-fb" href={event.facebookUrl} target="_blank" rel="noopener"><Fragment set:html={fbIcon} /> Join the Facebook group</a></section>
 </main>
-<footer>© {new Date().getFullYear()} {event.name} · zsatthegap.com</footer>
+<footer>© {new Date().getFullYear()} {event.name} · zsatthegap.com · <a class="fb" href={event.facebookUrl} target="_blank" rel="noopener" aria-label="Facebook group" set:html={fbIcon} /></footer>
 <script>
 const el = document.getElementById('countdown')!; const t = new Date(el.dataset.date!).getTime();
 const set = (id: string, v: number) => (document.getElementById(id)!.textContent = String(v).padStart(2, '0'));
@@ -71,6 +73,7 @@ section{max-width:960px;margin:auto;padding:4rem 1.2rem}section.alt{max-width:no
 h2{font-size:2rem;text-transform:uppercase;border-left:6px solid var(--o);padding-left:.6rem;display:inline-block}
 .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:1rem}.grid img{width:100%;height:220px;object-fit:cover;border-radius:8px}
 .ph{height:220px;border:2px dashed #554;border-radius:8px;display:grid;place-items:center;color:#998}
+.fb{display:inline-flex;vertical-align:middle}.btn-fb{background:#1877f2;color:#fff;display:inline-flex;align-items:center;gap:.5rem;margin:.5rem}
 footer{text-align:center;padding:2rem;color:#998;font-size:.9rem}
 @media(max-width:600px){nav div a{margin-left:.6rem;font-size:.9rem}}
 </style>

@@ -13,5 +13,6 @@ export const event = {
   hotelUrl: "https://fontanavillage.ibe.stayntouch.com/search-results?checkin=09-29-2027&checkout=10-04-2027&adults=1&kids=0&groupCode=ZATG27",
   hotelGroupCode: "ZATG27",
   hotelBlockDates: "Sept 29 – Oct 4, 2027",
+  facebookUrl: "https://www.facebook.com/groups/zsatthegap",
   contactEmail: "logsdonkaleb@gmail.com",
 };
