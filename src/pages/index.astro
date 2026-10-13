@@ -1,11 +1,15 @@
 ---
-import { Image } from 'astro:assets';
+import { Image, getImage } from 'astro:assets';
 import { event } from '../config';
 import hero from '../images/hero.png';
 import dragon from '../images/dragon-129.png';
 import us129 from '../images/us129-dragon.png';
 const imgs = Object.values(import.meta.glob<{ default: ImageMetadata }>('../images/gallery/*.{jpg,jpeg,png,webp}', { eager: true })).map(m => m.default);
 const gallery = [hero, ...imgs];
+const photos = await Promise.all(gallery.map(async (src) => {
+  const large = await getImage({ src, width: 2400 });
+  return { src, full: large.src };
+}));
 const fbIcon = `<svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" aria-hidden="true"><path d="M24 12a12 12 0 1 0-13.9 11.9v-8.4H7.1V12h3V9.4c0-3 1.8-4.7 4.5-4.7 1.3 0 2.7.2 2.7.2v3h-1.5c-1.5 0-2 .9-2 1.9V12h3.4l-.5 3.5h-2.9v8.4A12 12 0 0 0 24 12z"/></svg>`;
 ---
 <html lang="en">
@@ -47,11 +51,11 @@ const fbIcon = `<svg viewBox="0 0 24 24" width="20" height="20" fill="currentCol
 <div class="marquee">
   <div class="marquee-track">
     <div class="marquee-set">
-      {gallery.map(i => <Image src={i} alt="Zs at the Gap photo" width={600} />)}
+      {photos.map((p, i) => <button type="button" class="shot" data-i={i} data-full={p.full} aria-label={`Zs at the Gap photo ${i + 1} of ${photos.length}`}><Image src={p.src} alt="" width={600} /></button>)}
       {imgs.length === 0 && [1,2,3,4,5].map(n => <div class="ph">Photo {n} coming soon</div>)}
     </div>
     <div class="marquee-set" aria-hidden="true">
-      {gallery.map(i => <Image src={i} alt="" width={600} />)}
+      {photos.map((p, i) => <button type="button" class="shot" tabindex="-1" data-i={i} data-full={p.full}><Image src={p.src} alt="" width={600} /></button>)}
       {imgs.length === 0 && [1,2,3,4,5].map(n => <div class="ph">Photo {n} coming soon</div>)}
     </div>
   </div>
@@ -62,6 +66,12 @@ const fbIcon = `<svg viewBox="0 0 24 24" width="20" height="20" fill="currentCol
 <a class="btn btn-fb" href={event.facebookUrl} target="_blank" rel="noopener"><Fragment set:html={fbIcon} /> Join the Facebook group</a></section>
 </main>
 <footer>© {new Date().getFullYear()} {event.name} · zsatthegap.com · <a class="fb" href={event.facebookUrl} target="_blank" rel="noopener" aria-label="Facebook group" set:html={fbIcon} /></footer>
+<div id="lightbox" class="lb" hidden role="dialog" aria-modal="true" aria-label="Gallery photo">
+  <button type="button" class="lb-x" aria-label="Close">×</button>
+  <button type="button" class="lb-prev" aria-label="Previous photo">‹</button>
+  <button type="button" class="lb-next" aria-label="Next photo">›</button>
+  <img id="lb-img" alt="" />
+</div>
 <script>
 const el = document.getElementById('countdown')!; const t = new Date(el.dataset.date!).getTime();
 const set = (id: string, v: number) => (document.getElementById(id)!.textContent = String(v).padStart(2, '0'));
@@ -69,6 +79,69 @@ function tick() { let x = Math.max(0, t - Date.now());
   if (x === 0) { el.innerHTML = '<p class="live">Engines on, it\'s go time!</p>'; return; }
   set('d', Math.floor(x / 864e5)); set('h', Math.floor(x / 36e5) % 24); set('m', Math.floor(x / 6e4) % 60); set('s', Math.floor(x / 1e3) % 60); setTimeout(tick, 1000); }
 tick();
+</script>
+<script>
+const marquee = document.querySelector('.marquee');
+const lb = document.getElementById('lightbox');
+const lbImg = document.getElementById('lb-img');
+const fulls = [...document.querySelectorAll('.marquee-set:not([aria-hidden="true"]) .shot')].map((b) => ({
+  src: b.dataset.full, alt: b.getAttribute('aria-label') || 'Zs at the Gap photo',
+}));
+let index = 0, lastFocus = null, sx = 0, sy = 0;
+const focusable = () => [...lb.querySelectorAll('button:not([disabled])')];
+function show() {
+  const p = fulls[index];
+  lbImg.src = p.src;
+  lbImg.alt = p.alt;
+  lb.setAttribute('aria-label', p.alt);
+}
+function openAt(i, opener) {
+  if (!fulls.length) return;
+  index = (i + fulls.length) % fulls.length;
+  show();
+  lastFocus = opener;
+  lb.hidden = false;
+  document.body.style.overflow = 'hidden';
+  marquee.classList.add('is-paused');
+  lb.querySelector('.lb-x').focus();
+}
+function closeLb() {
+  if (lb.hidden) return;
+  lb.hidden = true;
+  document.body.style.overflow = '';
+  marquee.classList.remove('is-paused');
+  lbImg.removeAttribute('src');
+  if (lastFocus) lastFocus.focus();
+}
+function step(d) { index = (index + d + fulls.length) % fulls.length; show(); }
+marquee.addEventListener('click', (e) => {
+  const btn = e.target.closest('.shot');
+  if (!btn) return;
+  const i = Number(btn.dataset.i);
+  const visible = marquee.querySelector(`.marquee-set:not([aria-hidden="true"]) .shot[data-i="${i}"]`);
+  openAt(i, visible || btn);
+});
+lb.querySelector('.lb-x').addEventListener('click', closeLb);
+lb.querySelector('.lb-prev').addEventListener('click', () => step(-1));
+lb.querySelector('.lb-next').addEventListener('click', () => step(1));
+lb.addEventListener('click', (e) => { if (e.target === lb) closeLb(); });
+lb.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape') { e.preventDefault(); closeLb(); return; }
+  if (e.key === 'ArrowRight') { e.preventDefault(); step(1); return; }
+  if (e.key === 'ArrowLeft') { e.preventDefault(); step(-1); return; }
+  if (e.key !== 'Tab') return;
+  const items = focusable();
+  if (!items.length) return;
+  const first = items[0], last = items[items.length - 1];
+  if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+  else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+});
+lb.addEventListener('touchstart', (e) => { sx = e.changedTouches[0].clientX; sy = e.changedTouches[0].clientY; }, { passive: true });
+lb.addEventListener('touchend', (e) => {
+  const dx = e.changedTouches[0].clientX - sx, dy = e.changedTouches[0].clientY - sy;
+  if (Math.abs(dx) < 48 || Math.abs(dx) < Math.abs(dy)) return;
+  step(dx < 0 ? 1 : -1);
+}, { passive: true });
 </script>
 <style is:global>
 :root{--nismo:#C3002F;--nismo-hover:#ff2a55;--fg:#fff}
@@ -99,7 +172,15 @@ section{max-width:960px;margin:auto;padding:4rem 1.2rem}section.alt{max-width:no
 h2{font-size:2rem;text-transform:uppercase;border-left:6px solid var(--nismo);padding-left:.6rem;display:inline-block}
 .marquee{position:relative;overflow:hidden;margin-top:1.5rem}
 .marquee-track{display:flex;width:max-content;animation:marquee 35s linear infinite}
-.marquee:hover .marquee-track{animation-play-state:paused}
+.marquee:hover .marquee-track,.marquee.is-paused .marquee-track{animation-play-state:paused}
+.shot{padding:0;border:0;background:none;cursor:zoom-in;flex:none;line-height:0}
+.lb{position:fixed;inset:0;z-index:50;display:flex;align-items:center;justify-content:center;background:#000e;padding:3.5rem 4.5rem}
+.lb[hidden]{display:none}
+.lb img{max-width:min(92vw,1600px);max-height:86vh;width:auto;height:auto;object-fit:contain}
+.lb-x,.lb-prev,.lb-next{position:absolute;z-index:2;width:44px;height:44px;border:0;border-radius:999px;background:#000c;color:#fff;font-size:1.8rem;line-height:1;cursor:pointer}
+.lb-x{top:1rem;right:1rem}.lb-prev{left:1rem;top:50%;transform:translateY(-50%)}.lb-next{right:1rem;top:50%;transform:translateY(-50%)}
+.lb-x:hover,.lb-prev:hover,.lb-next:hover{color:var(--nismo)}
+.lb-x:focus-visible,.lb-prev:focus-visible,.lb-next:focus-visible{outline:2px solid var(--nismo);outline-offset:2px}
 .marquee-set{display:flex;gap:1rem;padding-right:1rem}
 .marquee img,.ph{height:200px;width:auto;flex:none;border-radius:8px}
 .ph{aspect-ratio:3/2;border:2px dashed #555;display:grid;place-items:center;color:#ddd;background:#0006;padding:0 .8rem;text-align:center}
