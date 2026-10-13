@@ -1,0 +1,80 @@
+---
+import { Image } from 'astro:assets';
+import { event } from '../config';
+import hero from '../images/hero.png';
+const imgs = Object.values(import.meta.glob<{ default: ImageMetadata }>('../images/gallery/*.{jpg,jpeg,png,webp}', { eager: true })).map(m => m.default);
+const gallery = [hero, ...imgs];
+const fbIcon = `<svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" aria-hidden="true"><path d="M24 12a12 12 0 1 0-13.9 11.9v-8.4H7.1V12h3V9.4c0-3 1.8-4.7 4.5-4.7 1.3 0 2.7.2 2.7.2v3h-1.5c-1.5 0-2 .9-2 1.9V12h3.4l-.5 3.5h-2.9v8.4A12 12 0 0 0 24 12z"/></svg>`;
+---
+<html lang="en">
+<head>
+<meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel="icon" href="/favicon.svg" />
+<title>{event.name} | Yearly Nissan Z Gathering at the Tail of the Dragon</title>
+<meta name="description" content={`${event.name}: the yearly Nissan Z car event at the Tail of the Dragon, Deals Gap.`} />
+</head>
+<body>
+<nav><a href="#top" class="brand">Zs<span>@</span>the Gap</a><div><a href="#event">Event</a><a href="#stay">Stay</a><a href="#gallery">Gallery</a><a href="#contact">Contact</a><a class="fb" href={event.facebookUrl} target="_blank" rel="noopener" aria-label="Facebook group" set:html={fbIcon} /></div></nav>
+<div class="banner"><Image src={hero} alt="Z at the Gap, Fontana Village, Oct 1-3, 2027" widths={[600, 900, 1200]} sizes="100vw" loading="eager" fetchpriority="high" /></div>
+<header id="top" class="hero">
+  <p class="kicker">Nissan Z · 318 curves · one weekend</p>
+  <h1>{event.name}</h1>
+  <p class="tagline">{event.tagline}</p>
+  <p class="when">{event.displayDate} · {event.displayTime}</p>
+  <p>{event.location}</p>
+  <div id="countdown" data-date={event.dateISO}>
+    <div><b id="d">--</b><small>Days</small></div><div><b id="h">--</b><small>Hours</small></div>
+    <div><b id="m">--</b><small>Min</small></div><div><b id="s">--</b><small>Sec</small></div>
+  </div>
+  <a class="btn" href="#stay">Book your stay</a>
+</header>
+<main>
+<section id="event"><h2>The Event</h2>
+<p>{event.name} is our yearly Nissan Z car gathering at the legendary <a href={event.dragonUrl} target="_blank" rel="noopener">Tail of the Dragon</a> at Deals Gap, 318 curves in 11 miles on US 129 along the Great Smoky Mountains. Bring your Z, from classic 240Zs to the latest Nissan Z, cruise the Dragon, show off your build, and hang out with fellow Z enthusiasts.</p>
+<p>Schedule details coming soon.</p></section>
+<section id="stay" class="alt"><h2>Book Your Stay</h2>
+<p>We've got a hotel block at <strong>{event.hotelName}</strong>. Book early, rooms near the Gap go fast.</p>
+<p>Block dates: <strong>{event.hotelBlockDates}</strong> · Group code: <strong>{event.hotelGroupCode}</strong> (already applied by the button below)</p>
+<a class="btn" href={event.hotelUrl} target="_blank" rel="noopener">Book at {event.hotelName}</a></section>
+<section id="gallery"><h2>Gallery</h2>
+<div class="grid">
+{gallery.map(i => <Image src={i} alt="Zs at the Gap photo" width={600} />)}
+{imgs.length === 0 && [1,2,3,4,5].map(n => <div class="ph">Photo {n} coming soon</div>)}
+</div></section>
+<section id="contact" class="alt"><h2>Questions?</h2>
+<p>Email us at <a href={`mailto:${event.contactEmail}`}>{event.contactEmail}</a></p>
+<a class="btn" href={`mailto:${event.contactEmail}?subject=Zs%20at%20the%20Gap`}>Email Us</a>
+<a class="btn btn-fb" href={event.facebookUrl} target="_blank" rel="noopener"><Fragment set:html={fbIcon} /> Join the Facebook group</a></section>
+</main>
+<footer>© {new Date().getFullYear()} {event.name} · zsatthegap.com · <a class="fb" href={event.facebookUrl} target="_blank" rel="noopener" aria-label="Facebook group" set:html={fbIcon} /></footer>
+<script>
+const el = document.getElementById('countdown')!; const t = new Date(el.dataset.date!).getTime();
+const set = (id: string, v: number) => (document.getElementById(id)!.textContent = String(v).padStart(2, '0'));
+function tick() { let x = Math.max(0, t - Date.now());
+  if (x === 0) { el.innerHTML = '<p class="live">Engines on, it\'s go time!</p>'; return; }
+  set('d', Math.floor(x / 864e5)); set('h', Math.floor(x / 36e5) % 24); set('m', Math.floor(x / 6e4) % 60); set('s', Math.floor(x / 1e3) % 60); setTimeout(tick, 1000); }
+tick();
+</script>
+<style is:global>
+:root{--o:#ff6a13;--bg:#14110f;--bg2:#1f1a17;--fg:#f3ece4}
+*{box-sizing:border-box}body{margin:0;font-family:system-ui,sans-serif;background:var(--bg);color:var(--fg);line-height:1.6}
+a{color:var(--o)}nav{position:sticky;top:0;z-index:9;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:.5rem;padding:.7rem 1.2rem;background:#000c;backdrop-filter:blur(6px)}
+nav a{color:var(--fg);text-decoration:none;margin-left:1rem;font-weight:600}.brand{font-weight:900;font-size:1.3rem;margin:0}.brand span{color:var(--o)}
+.banner{background:#000;line-height:0}.banner img{display:block;width:100%;max-width:1200px;height:auto;margin:auto}
+.hero{min-height:auto;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:3rem 1rem;
+background:linear-gradient(#0008,#14110f),repeating-linear-gradient(115deg,#2a231e 0 40px,#1b1613 40px 80px)}
+.hero h1{font-size:clamp(2.8rem,10vw,6rem);margin:.2rem 0;text-transform:uppercase;letter-spacing:.04em;font-weight:900;text-shadow:0 4px 0 var(--o)}
+.kicker{text-transform:uppercase;letter-spacing:.3em;color:var(--o);font-size:.85rem}.tagline{max-width:640px;font-size:1.15rem;margin:.5rem auto}.when{font-size:1.3rem;font-weight:700}
+#countdown{display:flex;gap:.8rem;margin:1.5rem 0;flex-wrap:wrap;justify-content:center}#countdown div{background:var(--bg2);border:2px solid var(--o);border-radius:10px;padding:.8rem;min-width:80px}
+#countdown b{display:block;font-size:clamp(1.8rem,7vw,3rem);font-variant-numeric:tabular-nums}#countdown small{text-transform:uppercase;letter-spacing:.15em;font-size:.7rem}
+.live{font-size:2rem;font-weight:900;color:var(--o)}
+.btn{display:inline-block;background:var(--o);color:#000;font-weight:800;padding:.85rem 1.6rem;border-radius:999px;text-decoration:none;text-transform:uppercase;letter-spacing:.05em}
+section{max-width:960px;margin:auto;padding:4rem 1.2rem}section.alt{max-width:none;background:var(--bg2);text-align:center}
+h2{font-size:2rem;text-transform:uppercase;border-left:6px solid var(--o);padding-left:.6rem;display:inline-block}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:1rem}.grid img{width:100%;height:220px;object-fit:cover;border-radius:8px}
+.ph{height:220px;border:2px dashed #554;border-radius:8px;display:grid;place-items:center;color:#998}
+.fb{display:inline-flex;vertical-align:middle}.btn-fb{background:#1877f2;color:#fff;display:inline-flex;align-items:center;gap:.5rem;margin:.5rem}
+footer{text-align:center;padding:2rem;color:#998;font-size:.9rem}
+@media(max-width:600px){nav div a{margin-left:.6rem;font-size:.9rem}}
+</style>
+</body></html>
