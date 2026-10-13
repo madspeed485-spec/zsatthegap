@@ -18,6 +18,7 @@ const ordered = [
   '../images/gallery/gallery-13.jpg',
   '../images/gallery/gallery-14.jpg',
   '../images/gallery/gallery-15.jpg',
+  '../images/gallery/gallery-16.jpg',
 ];
 const captions = {
   '../images/gallery/gallery-10.jpg': 'Gray Nissan Z Nismo on Fontana Dam, side view with hazy mountains',
@@ -26,6 +27,7 @@ const captions = {
   '../images/gallery/gallery-13.jpg': 'Gray Nissan Z Nismo on Fontana Dam with the lake behind it',
   '../images/gallery/gallery-14.jpg': 'Gray Nissan Z Nismo side profile on Fontana Dam under blue skies',
   '../images/gallery/gallery-15.jpg': 'Gray Nissan Z carving a curve on the Tail of the Dragon',
+  '../images/gallery/gallery-16.jpg': 'Blue Nissan 350Z cornering on the Tail of the Dragon',
 };
 const rest = Object.keys(galleryModules).filter((path) => !ordered.includes(path)).sort();
 const imgs = [...rest, ...ordered].map((path) => ({ src: galleryModules[path].default, alt: captions[path] }));
