@@ -10,6 +10,8 @@ const ordered = [
   '../images/gallery/z350-dragon-statue.jpg',
   '../images/gallery/nismo-z-side.jpg',
   '../images/gallery/us129-north-sign.jpg',
+  '../images/gallery/fontana-dam-overlook.jpg',
+  '../images/gallery/z-lineup-fontana-dam.jpg',
 ];
 const rest = Object.keys(galleryModules).filter((path) => !ordered.includes(path)).sort();
 const imgs = [...rest, ...ordered].map((path) => galleryModules[path].default);
