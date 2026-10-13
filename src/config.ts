@@ -14,5 +14,5 @@ export const event = {
   hotelGroupCode: "ZATG27",
   hotelBlockDates: "Sept 29 – Oct 4, 2027",
   facebookUrl: "https://www.facebook.com/groups/zsatthegap",
-  contactEmail: "logsdonkaleb@gmail.com",
+  contactEmail: "support@zsatthegap.com",
 };
