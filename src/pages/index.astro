@@ -12,13 +12,27 @@ const ordered = [
   '../images/gallery/us129-north-sign.jpg',
   '../images/gallery/fontana-dam-overlook.jpg',
   '../images/gallery/z-lineup-fontana-dam.jpg',
+  '../images/gallery/gallery-10.jpg',
+  '../images/gallery/gallery-11.jpg',
+  '../images/gallery/gallery-12.jpg',
+  '../images/gallery/gallery-13.jpg',
+  '../images/gallery/gallery-14.jpg',
+  '../images/gallery/gallery-15.jpg',
 ];
+const captions = {
+  '../images/gallery/gallery-10.jpg': 'Red Nissan Z parked on a Tail of the Dragon overlook, with fog in the valley',
+  '../images/gallery/gallery-11.jpg': 'Red Nissan Z parked beside the Tail of the Dragon sign and dragon sculpture',
+  '../images/gallery/gallery-12.jpg': 'Red Nissan Z in front of a line of sports cars at the Tail of the Dragon overlook',
+  '../images/gallery/gallery-13.jpg': 'Row of Nissan Z cars parked along the Tail of the Dragon overlook above the fog',
+  '../images/gallery/gallery-14.jpg': 'Black Nissan Z with its hood open at the Tail of the Dragon overlook',
+  '../images/gallery/gallery-15.jpg': 'Nissan Zs and other sports cars lined up at the Fontana Dam overlook',
+};
 const rest = Object.keys(galleryModules).filter((path) => !ordered.includes(path)).sort();
-const imgs = [...rest, ...ordered].map((path) => galleryModules[path].default);
-const gallery = [hero, ...imgs];
-const photos = await Promise.all(gallery.map(async (src) => {
-  const large = await getImage({ src, width: 2400 });
-  return { src, full: large.src };
+const imgs = [...rest, ...ordered].map((path) => ({ src: galleryModules[path].default, alt: captions[path] }));
+const gallery = [{ src: hero }, ...imgs];
+const photos = await Promise.all(gallery.map(async (item) => {
+  const large = await getImage({ src: item.src, width: 2400 });
+  return { src: item.src, full: large.src, alt: item.alt };
 }));
 const fbIcon = `<svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" aria-hidden="true"><path d="M24 12a12 12 0 1 0-13.9 11.9v-8.4H7.1V12h3V9.4c0-3 1.8-4.7 4.5-4.7 1.3 0 2.7.2 2.7.2v3h-1.5c-1.5 0-2 .9-2 1.9V12h3.4l-.5 3.5h-2.9v8.4A12 12 0 0 0 24 12z"/></svg>`;
 const base = import.meta.env.BASE_URL.endsWith('/') ? import.meta.env.BASE_URL : `${import.meta.env.BASE_URL}/`;
@@ -62,7 +76,7 @@ const base = import.meta.env.BASE_URL.endsWith('/') ? import.meta.env.BASE_URL :
 <div class="marquee">
   <div class="marquee-track">
     <div class="marquee-set">
-      {photos.map((p, i) => <button type="button" class="shot" data-i={i} data-full={p.full} aria-label={`Zs at the Gap photo ${i + 1} of ${photos.length}`}><Image src={p.src} alt="" width={600} /></button>)}
+      {photos.map((p, i) => <button type="button" class="shot" data-i={i} data-full={p.full} aria-label={p.alt ?? `Zs at the Gap photo ${i + 1} of ${photos.length}`}><Image src={p.src} alt={p.alt ?? ''} width={600} /></button>)}
     </div>
     <div class="marquee-set" aria-hidden="true">
       {photos.map((p, i) => <button type="button" class="shot" tabindex="-1" data-i={i} data-full={p.full}><Image src={p.src} alt="" width={600} /></button>)}
