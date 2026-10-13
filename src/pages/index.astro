@@ -4,14 +4,20 @@ import { event } from '../config';
 import hero from '../images/hero.png';
 import dragon from '../images/dragon-129.png';
 import us129 from '../images/us129-dragon.png';
-const imgs = Object.values(import.meta.glob<{ default: ImageMetadata }>('../images/gallery/*.{jpg,jpeg,png,webp}', { eager: true })).map(m => m.default);
+const galleryModules = import.meta.glob<{ default: ImageMetadata }>('../images/gallery/*.{jpg,jpeg,png,webp}', { eager: true });
+const ordered = [
+  '../images/gallery/z350-dragon-curve.jpg',
+  '../images/gallery/z350-dragon-statue.jpg',
+  '../images/gallery/nismo-z-side.jpg',
+  '../images/gallery/us129-north-sign.jpg',
+];
+const rest = Object.keys(galleryModules).filter((path) => !ordered.includes(path)).sort();
+const imgs = [...rest, ...ordered].map((path) => galleryModules[path].default);
 const gallery = [hero, ...imgs];
 const photos = await Promise.all(gallery.map(async (src) => {
   const large = await getImage({ src, width: 2400 });
   return { src, full: large.src };
 }));
-const tileTotal = 6;
-const placeholders = Array.from({ length: Math.max(0, tileTotal - photos.length) }, (_, n) => n + 1);
 const fbIcon = `<svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" aria-hidden="true"><path d="M24 12a12 12 0 1 0-13.9 11.9v-8.4H7.1V12h3V9.4c0-3 1.8-4.7 4.5-4.7 1.3 0 2.7.2 2.7.2v3h-1.5c-1.5 0-2 .9-2 1.9V12h3.4l-.5 3.5h-2.9v8.4A12 12 0 0 0 24 12z"/></svg>`;
 ---
 <html lang="en">
@@ -54,11 +60,9 @@ const fbIcon = `<svg viewBox="0 0 24 24" width="20" height="20" fill="currentCol
   <div class="marquee-track">
     <div class="marquee-set">
       {photos.map((p, i) => <button type="button" class="shot" data-i={i} data-full={p.full} aria-label={`Zs at the Gap photo ${i + 1} of ${photos.length}`}><Image src={p.src} alt="" width={600} /></button>)}
-      {placeholders.map(n => <div class="ph">Photo {n} coming soon</div>)}
     </div>
     <div class="marquee-set" aria-hidden="true">
       {photos.map((p, i) => <button type="button" class="shot" tabindex="-1" data-i={i} data-full={p.full}><Image src={p.src} alt="" width={600} /></button>)}
-      {placeholders.map(n => <div class="ph">Photo {n} coming soon</div>)}
     </div>
   </div>
 </div></section>
@@ -184,8 +188,7 @@ h2{font-size:2rem;text-transform:uppercase;border-left:6px solid var(--nismo);pa
 .lb-x:hover,.lb-prev:hover,.lb-next:hover{color:var(--nismo)}
 .lb-x:focus-visible,.lb-prev:focus-visible,.lb-next:focus-visible{outline:2px solid var(--nismo);outline-offset:2px}
 .marquee-set{display:flex;gap:1rem;padding-right:1rem}
-.marquee img,.ph{height:200px;width:auto;flex:none;border-radius:8px}
-.ph{aspect-ratio:3/2;border:2px dashed #555;display:grid;place-items:center;color:#ddd;background:#0006;padding:0 .8rem;text-align:center}
+.marquee img{height:200px;width:auto;flex:none;border-radius:8px}
 .marquee::before,.marquee::after{content:"";position:absolute;top:0;bottom:0;width:3.5rem;z-index:1;pointer-events:none}
 .marquee::before{left:0;background:linear-gradient(to right,#000,transparent)}
 .marquee::after{right:0;background:linear-gradient(to left,#000,transparent)}
@@ -193,7 +196,7 @@ h2{font-size:2rem;text-transform:uppercase;border-left:6px solid var(--nismo);pa
 .fb{display:inline-flex;vertical-align:middle}.btn-fb{background:#1877f2;color:#fff;display:inline-flex;align-items:center;gap:.5rem;margin:.5rem}
 .btn-fb:hover{background:#0d65d9;color:#fff}
 footer{text-align:center;padding:2rem;color:var(--fg);font-size:.9rem;background:#000a}
-@media(max-width:600px){nav div a{margin-left:.6rem;font-size:.9rem}.hero-mid{flex-wrap:wrap;justify-content:center;gap:.75rem}.dragon,.us129{width:100px}.hero-copy{flex:1 1 100%;text-align:center}.hero-copy .tagline,.hero-copy p{text-align:center}.hero-copy .tagline{font-size:1rem}.marquee img,.ph{height:150px}}
+@media(max-width:600px){nav div a{margin-left:.6rem;font-size:.9rem}.hero-mid{flex-wrap:wrap;justify-content:center;gap:.75rem}.dragon,.us129{width:100px}.hero-copy{flex:1 1 100%;text-align:center}.hero-copy .tagline,.hero-copy p{text-align:center}.hero-copy .tagline{font-size:1rem}.marquee img{height:150px}}
 @media(prefers-reduced-motion:reduce){.marquee-track{animation:none}.marquee{overflow-x:auto}.marquee-set[aria-hidden="true"]{display:none}.marquee::before,.marquee::after{display:none}}
 </style>
 </body></html>
