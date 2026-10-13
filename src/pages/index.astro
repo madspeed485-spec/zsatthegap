@@ -1,7 +1,9 @@
 ---
 import { Image } from 'astro:assets';
 import { event } from '../config';
+import hero from '../images/hero.png';
 const imgs = Object.values(import.meta.glob<{ default: ImageMetadata }>('../images/gallery/*.{jpg,jpeg,png,webp}', { eager: true })).map(m => m.default);
+const gallery = [hero, ...imgs];
 ---
 <html lang="en">
 <head>
@@ -12,6 +14,7 @@ const imgs = Object.values(import.meta.glob<{ default: ImageMetadata }>('../imag
 </head>
 <body>
 <nav><a href="#top" class="brand">Zs<span>@</span>the Gap</a><div><a href="#event">Event</a><a href="#stay">Stay</a><a href="#gallery">Gallery</a><a href="#contact">Contact</a></div></nav>
+<div class="banner"><Image src={hero} alt="Z at the Gap, Fontana Village, Oct 1-3, 2027" widths={[600, 900, 1200]} sizes="100vw" loading="eager" fetchpriority="high" /></div>
 <header id="top" class="hero">
   <p class="kicker">Nissan Z · 318 curves · one weekend</p>
   <h1>{event.name}</h1>
@@ -34,7 +37,8 @@ const imgs = Object.values(import.meta.glob<{ default: ImageMetadata }>('../imag
 <a class="btn" href={event.hotelUrl} target="_blank" rel="noopener">Book at {event.hotelName}</a></section>
 <section id="gallery"><h2>Gallery</h2>
 <div class="grid">
-{imgs.length ? imgs.map(i => <Image src={i} alt="Zs at the Gap photo" width={600} />) : [1,2,3,4,5,6].map(n => <div class="ph">Photo {n} coming soon</div>)}
+{gallery.map(i => <Image src={i} alt="Zs at the Gap photo" width={600} />)}
+{imgs.length === 0 && [1,2,3,4,5].map(n => <div class="ph">Photo {n} coming soon</div>)}
 </div></section>
 <section id="contact" class="alt"><h2>Questions?</h2>
 <p>Email us at <a href={`mailto:${event.contactEmail}`}>{event.contactEmail}</a></p>
@@ -54,7 +58,8 @@ tick();
 *{box-sizing:border-box}body{margin:0;font-family:system-ui,sans-serif;background:var(--bg);color:var(--fg);line-height:1.6}
 a{color:var(--o)}nav{position:sticky;top:0;z-index:9;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:.5rem;padding:.7rem 1.2rem;background:#000c;backdrop-filter:blur(6px)}
 nav a{color:var(--fg);text-decoration:none;margin-left:1rem;font-weight:600}.brand{font-weight:900;font-size:1.3rem;margin:0}.brand span{color:var(--o)}
-.hero{min-height:92vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:3rem 1rem;
+.banner{background:#000;line-height:0}.banner img{display:block;width:100%;max-width:1200px;height:auto;margin:auto}
+.hero{min-height:auto;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:3rem 1rem;
 background:linear-gradient(#0008,#14110f),repeating-linear-gradient(115deg,#2a231e 0 40px,#1b1613 40px 80px)}
 .hero h1{font-size:clamp(2.8rem,10vw,6rem);margin:.2rem 0;text-transform:uppercase;letter-spacing:.04em;font-weight:900;text-shadow:0 4px 0 var(--o)}
 .kicker{text-transform:uppercase;letter-spacing:.3em;color:var(--o);font-size:.85rem}.tagline{max-width:640px;font-size:1.15rem;margin:.5rem auto}.when{font-size:1.3rem;font-weight:700}
