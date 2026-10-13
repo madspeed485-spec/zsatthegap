@@ -1,6 +1,6 @@
 // ===== EDIT THESE VALUES =====
 export const event = {
-  name: "Zs at the Gap",
+  name: "Z’s at the Gap",
   // Event runs Oct 1–3, 2027, starting 9:00 AM ET (-04:00 = EDT)
   dateISO: "2027-10-01T09:00:00-04:00",
   displayDate: "October 1–3, 2027",
