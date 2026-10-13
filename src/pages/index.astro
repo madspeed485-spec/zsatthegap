@@ -19,16 +19,17 @@ const photos = await Promise.all(gallery.map(async (src) => {
   return { src, full: large.src };
 }));
 const fbIcon = `<svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" aria-hidden="true"><path d="M24 12a12 12 0 1 0-13.9 11.9v-8.4H7.1V12h3V9.4c0-3 1.8-4.7 4.5-4.7 1.3 0 2.7.2 2.7.2v3h-1.5c-1.5 0-2 .9-2 1.9V12h3.4l-.5 3.5h-2.9v8.4A12 12 0 0 0 24 12z"/></svg>`;
+const base = import.meta.env.BASE_URL.endsWith('/') ? import.meta.env.BASE_URL : `${import.meta.env.BASE_URL}/`;
 ---
 <html lang="en">
 <head>
 <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
-<link rel="icon" href="/favicon.svg" />
+<link rel="icon" href={`${base}favicon.svg`} />
 <title>{event.name} | Yearly Nissan Z Gathering at the Tail of the Dragon</title>
 <meta name="description" content={`${event.name}: the yearly Nissan Z car event at the Tail of the Dragon, Deals Gap.`} />
 </head>
 <body>
-<nav><a href="#top" class="brand">Zs<span>@</span>the Gap</a><div><a href="#event">Event</a><a href="#stay">Stay</a><a href="#gallery">Gallery</a><a href="#contact">Contact</a><a class="fb" href={event.facebookUrl} target="_blank" rel="noopener" aria-label="Facebook group" set:html={fbIcon} /></div></nav>
+<nav><a href={`${base}#top`} class="brand">Zs<span>@</span>the Gap</a><div><a href={`${base}#event`}>Event</a><a href={`${base}#stay`}>Stay</a><a href={`${base}#gallery`}>Gallery</a><a href={`${base}#contact`}>Contact</a><a class="fb" href={event.facebookUrl} target="_blank" rel="noopener" aria-label="Facebook group" set:html={fbIcon} /></div></nav>
 <div class="banner"><Image src={hero} alt="Z at the Gap, Fontana Village, Oct 1-3, 2027" widths={[600, 900, 1200, 1600, 1920, 2400]} sizes="100vw" loading="eager" fetchpriority="high" /></div>
 <header id="top" class="hero">
   <p class="kicker">Nissan Z · 318 curves · one weekend</p>
@@ -46,7 +47,7 @@ const fbIcon = `<svg viewBox="0 0 24 24" width="20" height="20" fill="currentCol
     <div><b id="d">--</b><small>Days</small></div><div><b id="h">--</b><small>Hours</small></div>
     <div><b id="m">--</b><small>Min</small></div><div><b id="s">--</b><small>Sec</small></div>
   </div>
-  <a class="btn" href="#stay">Book your stay</a>
+  <a class="btn" href={`${base}#stay`}>Book your stay</a>
 </header>
 <main>
 <section id="event"><h2>The Event</h2>
