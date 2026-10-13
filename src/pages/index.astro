@@ -20,12 +20,12 @@ const ordered = [
   '../images/gallery/gallery-15.jpg',
 ];
 const captions = {
-  '../images/gallery/gallery-10.jpg': 'Red Nissan Z parked on a Tail of the Dragon overlook, with fog in the valley',
-  '../images/gallery/gallery-11.jpg': 'Red Nissan Z parked beside the Tail of the Dragon sign and dragon sculpture',
-  '../images/gallery/gallery-12.jpg': 'Red Nissan Z in front of a line of sports cars at the Tail of the Dragon overlook',
-  '../images/gallery/gallery-13.jpg': 'Row of Nissan Z cars parked along the Tail of the Dragon overlook above the fog',
-  '../images/gallery/gallery-14.jpg': 'Black Nissan Z with its hood open at the Tail of the Dragon overlook',
-  '../images/gallery/gallery-15.jpg': 'Nissan Zs and other sports cars lined up at the Fontana Dam overlook',
+  '../images/gallery/gallery-10.jpg': 'Gray Nissan Z Nismo on Fontana Dam, side view with hazy mountains',
+  '../images/gallery/gallery-11.jpg': 'Gray Nissan Z Nismo on Fontana Dam, rear three-quarter view',
+  '../images/gallery/gallery-12.jpg': 'Gray Nissan Z Nismo on Fontana Dam, front view',
+  '../images/gallery/gallery-13.jpg': 'Gray Nissan Z Nismo on Fontana Dam with the lake behind it',
+  '../images/gallery/gallery-14.jpg': 'Gray Nissan Z Nismo side profile on Fontana Dam under blue skies',
+  '../images/gallery/gallery-15.jpg': 'Gray Nissan Z carving a curve on the Tail of the Dragon',
 };
 const rest = Object.keys(galleryModules).filter((path) => !ordered.includes(path)).sort();
 const imgs = [...rest, ...ordered].map((path) => ({ src: galleryModules[path].default, alt: captions[path] }));
