@@ -34,8 +34,8 @@ const photos = await Promise.all(gallery.map(async (item) => {
   const large = await getImage({ src: item.src, width: 2400 });
   return { src: item.src, full: large.src, alt: item.alt };
 }));
-const fbIcon = `<svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" aria-hidden="true"><path d="M24 12a12 12 0 1 0-13.9 11.9v-8.4H7.1V12h3V9.4c0-3 1.8-4.7 4.5-4.7 1.3 0 2.7.2 2.7.2v3h-1.5c-1.5 0-2 .9-2 1.9V12h3.4l-.5 3.5h-2.9v8.4A12 12 0 0 0 24 12z"/></svg>`;
-const igIcon = `<svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" aria-hidden="true"><path d="M12 2.2c3.2 0 3.6 0 4.8.1 3.3.1 4.8 1.7 4.9 4.9.1 1.3.1 1.6.1 4.8s0 3.6-.1 4.8c-.1 3.2-1.7 4.8-4.9 4.9-1.3.1-1.6.1-4.8.1s-3.6 0-4.8-.1c-3.3-.1-4.8-1.7-4.9-4.9-.1-1.2-.1-1.6-.1-4.8s0-3.6.1-4.8C2.4 3.9 3.9 2.4 7.2 2.3 8.4 2.2 8.8 2.2 12 2.2zM12 0C8.7 0 8.3 0 7.1.1 2.7.3.3 2.7.1 7.1 0 8.3 0 8.7 0 12s0 3.7.1 4.9c.2 4.4 2.6 6.8 7 7C8.3 24 8.7 24 12 24s3.7 0 4.9-.1c4.4-.2 6.8-2.6 7-7 .1-1.2.1-1.6.1-4.9s0-3.7-.1-4.9c-.2-4.4-2.6-6.8-7-7C15.7 0 15.3 0 12 0zm0 5.8a6.2 6.2 0 1 0 0 12.4 6.2 6.2 0 0 0 0-12.4zM12 16a4 4 0 1 1 0-8 4 4 0 0 1 0 8zm6.4-11.8a1.4 1.4 0 1 0 0 2.9 1.4 1.4 0 0 0 0-2.9z"/></svg>`;
+const fbIcon = `<svg viewBox="0 0 32 32" width="20" height="20" aria-hidden="true"><circle cx="16" cy="16" r="16" fill="#1877F2"/><path fill="#fff" d="M16 32l.001-8.667h2.917l.437-3.387h-3.354v-2.16c0-.98.272-1.647 1.678-1.647h1.792v-3.03a23.9 23.9 0 0 0-2.612-.133c-2.584 0-4.354 1.577-4.354 4.474v2.496H9.667v3.387h2.835V32H16z"/></svg>`;
+const igIcon = (id: string) => `<svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><defs><linearGradient id="${id}" x1="0" y1="24" x2="24" y2="0" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#FEDA75"/><stop offset="0.25" stop-color="#FA7E1E"/><stop offset="0.5" stop-color="#D62976"/><stop offset="0.75" stop-color="#962FBF"/><stop offset="1" stop-color="#4F5BD5"/></linearGradient></defs><rect width="24" height="24" rx="6" fill="url(#${id})"/><rect x="6.1" y="6.1" width="11.8" height="11.8" rx="3.4" fill="none" stroke="#fff" stroke-width="1.6"/><circle cx="12" cy="12.15" r="2.55" fill="none" stroke="#fff" stroke-width="1.6"/><circle cx="15.85" cy="8.15" r=".85" fill="#fff"/></svg>`;
 const base = import.meta.env.BASE_URL.endsWith('/') ? import.meta.env.BASE_URL : `${import.meta.env.BASE_URL}/`;
 ---
 <html lang="en">
@@ -48,7 +48,7 @@ const base = import.meta.env.BASE_URL.endsWith('/') ? import.meta.env.BASE_URL :
 <meta property="og:description" content={`${event.name}: the yearly Nissan Z car event at the Tail of the Dragon, Deals Gap.`} />
 </head>
 <body>
-<nav><a href={`${base}#top`} class="brand">Z’s<span>@</span>the Gap</a><div class="nav-links"><a href={`${base}#event`}>Event</a><a href={`${base}#stay`}>Stay</a><a href={`${base}#gallery`}>Gallery</a><a href={`${base}#contact`}>Contact</a></div><div class="nav-social"><a class="fb" href={event.facebookUrl} target="_blank" rel="noopener" aria-label="Facebook group" set:html={fbIcon} /><a class="ig" href={event.instagramUrl} target="_blank" rel="noopener" aria-label="Instagram" set:html={igIcon} /></div></nav>
+<nav><a href={`${base}#top`} class="brand">Z’s<span>@</span>the Gap</a><div class="nav-links"><a href={`${base}#event`}>Event</a><a href={`${base}#stay`}>Stay</a><a href={`${base}#gallery`}>Gallery</a><a href={`${base}#contact`}>Contact</a></div><div class="nav-social"><a class="fb" href={event.facebookUrl} target="_blank" rel="noopener" aria-label="Facebook group" set:html={fbIcon} /><a class="ig" href={event.instagramUrl} target="_blank" rel="noopener" aria-label="Instagram" set:html={igIcon('ig-nav')} /></div></nav>
 <div class="banner"><Image src={hero} alt="Z at the Gap, Fontana Village, Oct 1-3, 2027" widths={[600, 900, 1200, 1600, 1920, 2400]} sizes="100vw" loading="eager" fetchpriority="high" /></div>
 <header id="top" class="hero">
   <p class="kicker">Nissan Z · 318 curves · one weekend</p>
@@ -90,9 +90,9 @@ const base = import.meta.env.BASE_URL.endsWith('/') ? import.meta.env.BASE_URL :
 <p>Email us at <a href={`mailto:${event.contactEmail}`}>{event.contactEmail}</a></p>
 <a class="btn" href={`mailto:${event.contactEmail}?subject=${encodeURIComponent(event.name)}`}>Email Us</a>
 <a class="btn btn-fb" href={event.facebookUrl} target="_blank" rel="noopener"><Fragment set:html={fbIcon} /> Join the Facebook group</a>
-<a class="btn btn-ig" href={event.instagramUrl} target="_blank" rel="noopener"><Fragment set:html={igIcon} /> Follow on Instagram</a></section>
+<a class="btn btn-ig" href={event.instagramUrl} target="_blank" rel="noopener"><Fragment set:html={igIcon('ig-btn')} /> Follow on Instagram</a></section>
 </main>
-<footer>© {new Date().getFullYear()} {event.name} · zsatthegap.com · <a class="fb" href={event.facebookUrl} target="_blank" rel="noopener" aria-label="Facebook group" set:html={fbIcon} /> <a class="ig" href={event.instagramUrl} target="_blank" rel="noopener" aria-label="Instagram" set:html={igIcon} /></footer>
+<footer>© {new Date().getFullYear()} {event.name} · zsatthegap.com · <a class="fb" href={event.facebookUrl} target="_blank" rel="noopener" aria-label="Facebook group" set:html={fbIcon} /> <a class="ig" href={event.instagramUrl} target="_blank" rel="noopener" aria-label="Instagram" set:html={igIcon('ig-footer')} /></footer>
 <div id="lightbox" class="lb" hidden role="dialog" aria-modal="true" aria-label="Gallery photo">
   <button type="button" class="lb-x" aria-label="Close">×</button>
   <button type="button" class="lb-prev" aria-label="Previous photo">‹</button>
@@ -217,7 +217,10 @@ h2{font-size:2rem;text-transform:uppercase;border-left:6px solid var(--nismo);pa
 .marquee::before{left:0;background:linear-gradient(to right,#000,transparent)}
 .marquee::after{right:0;background:linear-gradient(to left,#000,transparent)}
 @keyframes marquee{from{transform:translateX(0)}to{transform:translateX(-50%)}}
-.fb,.ig{display:inline-flex;vertical-align:middle}.btn-fb,.btn-ig{color:#fff;display:inline-flex;align-items:center;gap:.5rem;margin:.5rem}
+.fb,.ig{display:inline-flex;vertical-align:middle}.nav-social a:hover,footer .fb:hover,footer .ig:hover{opacity:.82}
+.btn-fb,.btn-ig{color:#fff;display:inline-flex;align-items:center;gap:.5rem;margin:.5rem}
+.btn-fb svg,.btn-ig svg{flex:none;box-shadow:0 0 0 2px #fff}
+.btn-fb svg{border-radius:50%}.btn-ig svg{border-radius:5px}
 .btn-fb{background:#1877f2}.btn-fb:hover{background:#0d65d9;color:#fff}
 .btn-ig{background:#E1306C}.btn-ig:hover{background:#c4215a;color:#fff}
 footer{text-align:center;padding:2rem;color:var(--fg);font-size:.9rem;background:#000a}
