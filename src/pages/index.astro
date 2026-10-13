@@ -30,6 +30,7 @@ const imgs = Object.values(import.meta.glob<{ default: ImageMetadata }>('../imag
 <p>Schedule details coming soon.</p></section>
 <section id="stay" class="alt"><h2>Book Your Stay</h2>
 <p>We've got a hotel block at <strong>{event.hotelName}</strong>. Book early, rooms near the Gap go fast.</p>
+<p>Block dates: <strong>{event.hotelBlockDates}</strong> · Group code: <strong>{event.hotelGroupCode}</strong> (already applied by the button below)</p>
 <a class="btn" href={event.hotelUrl} target="_blank" rel="noopener">Book at {event.hotelName}</a></section>
 <section id="gallery"><h2>Gallery</h2>
 <div class="grid">

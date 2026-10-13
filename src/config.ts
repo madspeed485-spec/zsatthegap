@@ -8,8 +8,10 @@ export const event = {
   tagline: "Save the date! October 1-3 2027! Come out and experience some of the best cars to come from Nissan all in one place.",
   location: "Tail of the Dragon, Deals Gap (US 129, NC/TN)",
   dragonUrl: "https://tailofthedragon.com",
-  // PLACEHOLDER: hotel booking link
-  hotelName: "PLACEHOLDER Hotel Name",
-  hotelUrl: "https://example.com/book-your-stay",
+  // Hotel block: Sept 29 – Oct 4, 2027, group code ZATG27
+  hotelName: "Fontana Village Resort",
+  hotelUrl: "https://fontanavillage.ibe.stayntouch.com/search-results?checkin=09-29-2027&checkout=10-04-2027&adults=1&kids=0&groupCode=ZATG27",
+  hotelGroupCode: "ZATG27",
+  hotelBlockDates: "Sept 29 – Oct 4, 2027",
   contactEmail: "logsdonkaleb@gmail.com",
 };
