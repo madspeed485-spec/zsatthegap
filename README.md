@@ -1,11 +1,5 @@
 # Zs at the Gap
 
-Temporarily published at https://madspeed485-spec.github.io/zsatthegap/ while DNS for zsatthegap.com is not set up. `astro.config.mjs` uses that GitHub Pages origin and `base: '/zsatthegap'`.
+Published at https://zsatthegap.com. `astro.config.mjs` sets `site` to that origin and serves from the root. `public/CNAME` contains `zsatthegap.com` so GitHub Pages uses the custom domain.
 
-`npm run dev` serves the site at http://localhost:4400/zsatthegap/ (port 4400, because 4321 is used by another app).
-
-## Switch back to zsatthegap.com
-
-1. Move `docs/CNAME.disabled` back to `public/CNAME` (the file already contains `zsatthegap.com`).
-2. In `astro.config.mjs`, set `site` to `https://zsatthegap.com` and remove `base`.
-3. Push to `main`. The Pages workflow deploys `dist/`, and the restored `CNAME` tells GitHub Pages to serve the custom domain again.
+`npm run dev` serves the site at http://localhost:4400/ (port 4400, because 4321 is used by another app).
