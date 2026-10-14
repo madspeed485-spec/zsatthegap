@@ -2,6 +2,8 @@
 
 Temporarily published at https://madspeed485-spec.github.io/zsatthegap/ while DNS for zsatthegap.com is not set up. `astro.config.mjs` uses that GitHub Pages origin and `base: '/zsatthegap'`.
 
+`npm run dev` serves the site at http://localhost:4400/zsatthegap/ (port 4400, because 4321 is used by another app).
+
 ## Switch back to zsatthegap.com
 
 1. Move `docs/CNAME.disabled` back to `public/CNAME` (the file already contains `zsatthegap.com`).
