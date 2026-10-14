@@ -3,36 +3,31 @@ import { Image, getImage } from 'astro:assets';
 import Base from '../layouts/Base.astro';
 import { event } from '../config';
 import { fbIcon, igIcon } from '../icons';
+import galleryEntries from '../content/gallery.json';
 import hero from '../images/hero.png';
 import dragon from '../images/dragon-129.png';
 import us129 from '../images/us129-dragon.png';
 const galleryModules = import.meta.glob<{ default: ImageMetadata }>('../images/gallery/*.{jpg,jpeg,png,webp}', { eager: true });
-const ordered = [
-  '../images/gallery/z350-dragon-curve.jpg',
-  '../images/gallery/z350-dragon-statue.jpg',
-  '../images/gallery/nismo-z-side.jpg',
-  '../images/gallery/us129-north-sign.jpg',
-  '../images/gallery/fontana-dam-overlook.jpg',
-  '../images/gallery/z-lineup-fontana-dam.jpg',
-  '../images/gallery/gallery-10.jpg',
-  '../images/gallery/gallery-11.jpg',
-  '../images/gallery/gallery-12.jpg',
-  '../images/gallery/gallery-13.jpg',
-  '../images/gallery/gallery-14.jpg',
-  '../images/gallery/gallery-15.jpg',
-  '../images/gallery/gallery-16.jpg',
-];
-const captions = {
-  '../images/gallery/gallery-10.jpg': 'Gray Nissan Z Nismo on Fontana Dam, side view with hazy mountains',
-  '../images/gallery/gallery-11.jpg': 'Gray Nissan Z Nismo on Fontana Dam, rear three-quarter view',
-  '../images/gallery/gallery-12.jpg': 'Gray Nissan Z Nismo on Fontana Dam, front view',
-  '../images/gallery/gallery-13.jpg': 'Gray Nissan Z Nismo on Fontana Dam with the lake behind it',
-  '../images/gallery/gallery-14.jpg': 'Gray Nissan Z Nismo side profile on Fontana Dam under blue skies',
-  '../images/gallery/gallery-15.jpg': 'Gray Nissan Z carving a curve on the Tail of the Dragon',
-  '../images/gallery/gallery-16.jpg': 'Blue Nissan 350Z cornering on the Tail of the Dragon',
-};
-const rest = Object.keys(galleryModules).filter((path) => !ordered.includes(path)).sort();
-const imgs = [...rest, ...ordered].map((path) => ({ src: galleryModules[path].default, alt: captions[path] }));
+const fileName = (path: string) => path.split('/').pop()!.toLowerCase();
+const galleryFiles = Object.entries(galleryModules).map(([path, mod]) => ({
+  name: fileName(path),
+  src: mod.default,
+}));
+const galleryByName = new Map(galleryFiles.map((file) => [file.name, file]));
+const listed = new Set<string>();
+const fromData = galleryEntries.flatMap((entry) => {
+  const name = fileName(entry.image || '');
+  const file = galleryByName.get(name);
+  if (!name || !file || listed.has(name)) return [];
+  listed.add(name);
+  const alt = entry.alt?.trim();
+  return [{ src: file.src, alt: alt || undefined }];
+});
+const extras = galleryFiles
+  .filter((file) => !listed.has(file.name))
+  .sort((a, b) => a.name.localeCompare(b.name))
+  .map((file) => ({ src: file.src, alt: undefined }));
+const imgs = [...fromData, ...extras];
 const gallery = [{ src: hero }, ...imgs];
 const photos = await Promise.all(gallery.map(async (item) => {
   const large = await getImage({ src: item.src, width: 2400 });

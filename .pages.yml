@@ -1,0 +1,24 @@
+media:
+  input: src/images/gallery
+  output: src/images/gallery
+  extensions: [jpg, jpeg, png, webp]
+  rename: false
+content:
+  - name: gallery
+    label: Gallery
+    type: file
+    path: src/content/gallery.json
+    format: json
+    list: true
+    fields:
+      - name: image
+        label: Image
+        type: image
+        required: true
+        options:
+          path: src/images/gallery
+          extensions: [jpg, jpeg, png, webp]
+      - name: alt
+        label: Alt text
+        type: string
+        description: Describe the photo. Leave blank for a default caption.
