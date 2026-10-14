@@ -1,17 +1,58 @@
 [
-  { "image": "src/images/gallery/5296914.jpg", "alt": "" },
-  { "image": "src/images/gallery/dragon-map.png", "alt": "" },
-  { "image": "src/images/gallery/z350-dragon-curve.jpg", "alt": "" },
-  { "image": "src/images/gallery/z350-dragon-statue.jpg", "alt": "" },
-  { "image": "src/images/gallery/nismo-z-side.jpg", "alt": "" },
-  { "image": "src/images/gallery/us129-north-sign.jpg", "alt": "" },
-  { "image": "src/images/gallery/fontana-dam-overlook.jpg", "alt": "" },
-  { "image": "src/images/gallery/z-lineup-fontana-dam.jpg", "alt": "" },
-  { "image": "src/images/gallery/gallery-10.jpg", "alt": "Gray Nissan Z Nismo on Fontana Dam, side view with hazy mountains" },
-  { "image": "src/images/gallery/gallery-11.jpg", "alt": "Gray Nissan Z Nismo on Fontana Dam, rear three-quarter view" },
-  { "image": "src/images/gallery/gallery-12.jpg", "alt": "Gray Nissan Z Nismo on Fontana Dam, front view" },
-  { "image": "src/images/gallery/gallery-13.jpg", "alt": "Gray Nissan Z Nismo on Fontana Dam with the lake behind it" },
-  { "image": "src/images/gallery/gallery-14.jpg", "alt": "Gray Nissan Z Nismo side profile on Fontana Dam under blue skies" },
-  { "image": "src/images/gallery/gallery-15.jpg", "alt": "Gray Nissan Z carving a curve on the Tail of the Dragon" },
-  { "image": "src/images/gallery/gallery-16.jpg", "alt": "Blue Nissan 350Z cornering on the Tail of the Dragon" }
+  {
+    "image": "src/images/gallery/5296914.jpg"
+  },
+  {
+    "image": "src/images/gallery/dragon-map.png"
+  },
+  {
+    "image": "src/images/gallery/z350-dragon-curve.jpg"
+  },
+  {
+    "image": "src/images/gallery/z350-dragon-statue.jpg"
+  },
+  {
+    "image": "src/images/gallery/nismo-z-side.jpg"
+  },
+  {
+    "image": "src/images/gallery/us129-north-sign.jpg"
+  },
+  {
+    "image": "src/images/gallery/fontana-dam-overlook.jpg"
+  },
+  {
+    "image": "src/images/gallery/z-lineup-fontana-dam.jpg"
+  },
+  {
+    "image": "src/images/gallery/gallery-10.jpg",
+    "alt": "Gray Nissan Z Nismo on Fontana Dam, side view with hazy mountains"
+  },
+  {
+    "image": "src/images/gallery/gallery-11.jpg",
+    "alt": "Gray Nissan Z Nismo on Fontana Dam, rear three-quarter view"
+  },
+  {
+    "image": "src/images/gallery/gallery-12.jpg",
+    "alt": "Gray Nissan Z Nismo on Fontana Dam, front view"
+  },
+  {
+    "image": "src/images/gallery/gallery-13.jpg",
+    "alt": "Gray Nissan Z Nismo on Fontana Dam with the lake behind it"
+  },
+  {
+    "image": "src/images/gallery/gallery-14.jpg",
+    "alt": "Gray Nissan Z Nismo side profile on Fontana Dam under blue skies"
+  },
+  {
+    "image": "src/images/gallery/gallery-15.jpg",
+    "alt": "Gray Nissan Z carving a curve on the Tail of the Dragon"
+  },
+  {
+    "image": "src/images/gallery/gallery-16.jpg",
+    "alt": "Blue Nissan 350Z cornering on the Tail of the Dragon"
+  },
+  {
+    "image": "src/images/gallery/Screenshot 2026-04-13 105748.png",
+    "alt": "test"
+  }
 ]
