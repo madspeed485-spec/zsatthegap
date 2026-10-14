@@ -1,6 +1,8 @@
 ---
 import { Image, getImage } from 'astro:assets';
+import Base from '../layouts/Base.astro';
 import { event } from '../config';
+import { fbIcon, igIcon } from '../icons';
 import hero from '../images/hero.png';
 import dragon from '../images/dragon-129.png';
 import us129 from '../images/us129-dragon.png';
@@ -36,21 +38,9 @@ const photos = await Promise.all(gallery.map(async (item) => {
   const large = await getImage({ src: item.src, width: 2400 });
   return { src: item.src, full: large.src, alt: item.alt };
 }));
-const fbIcon = `<svg viewBox="0 0 32 32" width="20" height="20" aria-hidden="true"><circle cx="16" cy="16" r="16" fill="#1877F2"/><path fill="#fff" d="M16 32l.001-8.667h2.917l.437-3.387h-3.354v-2.16c0-.98.272-1.647 1.678-1.647h1.792v-3.03a23.9 23.9 0 0 0-2.612-.133c-2.584 0-4.354 1.577-4.354 4.474v2.496H9.667v3.387h2.835V32H16z"/></svg>`;
-const igIcon = (id: string) => `<svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><defs><linearGradient id="${id}" x1="0" y1="24" x2="24" y2="0" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#FEDA75"/><stop offset="0.25" stop-color="#FA7E1E"/><stop offset="0.5" stop-color="#D62976"/><stop offset="0.75" stop-color="#962FBF"/><stop offset="1" stop-color="#4F5BD5"/></linearGradient></defs><rect width="24" height="24" rx="6" fill="url(#${id})"/><rect x="6.1" y="6.1" width="11.8" height="11.8" rx="3.4" fill="none" stroke="#fff" stroke-width="1.6"/><circle cx="12" cy="12.15" r="2.55" fill="none" stroke="#fff" stroke-width="1.6"/><circle cx="15.85" cy="8.15" r=".85" fill="#fff"/></svg>`;
 const base = import.meta.env.BASE_URL.endsWith('/') ? import.meta.env.BASE_URL : `${import.meta.env.BASE_URL}/`;
 ---
-<html lang="en">
-<head>
-<meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
-<link rel="icon" href={`${base}favicon.svg`} />
-<title>{event.name} | Yearly Nissan Z Gathering at the Tail of the Dragon</title>
-<meta name="description" content={`${event.name}: the yearly Nissan Z car event at the Tail of the Dragon, Deals Gap.`} />
-<meta property="og:title" content={`${event.name} | Yearly Nissan Z Gathering at the Tail of the Dragon`} />
-<meta property="og:description" content={`${event.name}: the yearly Nissan Z car event at the Tail of the Dragon, Deals Gap.`} />
-</head>
-<body>
-<nav><a href={`${base}#top`} class="brand">Z’s<span>@</span>the Gap</a><div class="nav-links"><a href={`${base}#event`}>Event</a><a href={`${base}#stay`}>Stay</a><a href={`${base}#gallery`}>Gallery</a><a href={`${base}#contact`}>Contact</a></div><div class="nav-social"><a class="fb" href={event.facebookUrl} target="_blank" rel="noopener" aria-label="Facebook group" set:html={fbIcon} /><a class="ig" href={event.instagramUrl} target="_blank" rel="noopener" aria-label="Instagram" set:html={igIcon('ig-nav')} /></div></nav>
+<Base title={`${event.name} | Yearly Nissan Z Gathering at the Tail of the Dragon`} description={`${event.name}: the yearly Nissan Z car event at the Tail of the Dragon, Deals Gap.`}>
 <div class="banner"><Image src={hero} alt="Z at the Gap, Fontana Village, Oct 1-3, 2027" widths={[600, 900, 1200, 1600, 1920, 2400]} sizes="100vw" loading="eager" fetchpriority="high" /></div>
 <header id="top" class="hero">
   <p class="kicker">Nissan Z · 318 curves · one weekend</p>
@@ -94,8 +84,6 @@ const base = import.meta.env.BASE_URL.endsWith('/') ? import.meta.env.BASE_URL :
 <a class="btn btn-fb" href={event.facebookUrl} target="_blank" rel="noopener"><Fragment set:html={fbIcon} /> Join the Facebook group</a>
 <a class="btn btn-ig" href={event.instagramUrl} target="_blank" rel="noopener"><Fragment set:html={igIcon('ig-btn')} /> Follow on Instagram</a></section>
 </main>
-<footer><p class="foot-copy">© {new Date().getFullYear()} {event.name} · zsatthegap.com · <a class="fb" href={event.facebookUrl} target="_blank" rel="noopener" aria-label="Facebook group" set:html={fbIcon} /> <a class="ig" href={event.instagramUrl} target="_blank" rel="noopener" aria-label="Instagram" set:html={igIcon('ig-footer')} /></p><button type="button" class="to-top" id="to-top">↑ Back to top</button></footer>
-<div id="copy-toast" class="toast" hidden role="status" aria-live="polite"></div>
 <div id="lightbox" class="lb" hidden role="dialog" aria-modal="true" aria-label="Gallery photo">
   <button type="button" class="lb-x" aria-label="Close">×</button>
   <button type="button" class="lb-prev" aria-label="Previous photo">‹</button>
@@ -173,112 +161,4 @@ lb.addEventListener('touchend', (e) => {
   step(dx < 0 ? 1 : -1);
 }, { passive: true });
 </script>
-<script>
-document.getElementById('to-top').addEventListener('click', () => {
-  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
-  window.scrollTo({ top: 0, behavior: reduce ? 'auto' : 'smooth' });
-});
-</script>
-<script>
-const toast = document.getElementById('copy-toast');
-let toastTimer = 0;
-function copyText(text) {
-  const fallback = () => {
-    const ta = document.createElement('textarea');
-    ta.value = text;
-    ta.setAttribute('readonly', '');
-    ta.style.position = 'fixed';
-    ta.style.top = '0';
-    ta.style.left = '0';
-    ta.style.opacity = '0';
-    document.body.appendChild(ta);
-    ta.focus();
-    ta.select();
-    ta.setSelectionRange(0, text.length);
-    let ok = false;
-    try { ok = document.execCommand('copy'); } catch (err) { ok = false; }
-    ta.remove();
-    if (!ok) throw new Error('copy failed');
-  };
-  if (navigator.clipboard && navigator.clipboard.writeText) {
-    return navigator.clipboard.writeText(text).catch(fallback);
-  }
-  return Promise.resolve().then(fallback);
-}
-function showCopied(email) {
-  toast.textContent = 'Email copied: ' + email;
-  toast.hidden = false;
-  clearTimeout(toastTimer);
-  toastTimer = setTimeout(() => { toast.hidden = true; }, 2500);
-}
-document.addEventListener('click', (e) => {
-  const link = e.target.closest('a[href^="mailto:"]');
-  if (!link) return;
-  const email = decodeURIComponent((link.href.match(/^mailto:([^?]+)/) || [])[1] || '');
-  if (!email) return;
-  copyText(email).then(() => showCopied(email)).catch(() => {});
-});
-</script>
-<style is:global>
-:root{--nismo:#C3002F;--nismo-hover:#ff2a55;--fg:#fff}
-*{box-sizing:border-box}
-body,section,.hero,section.alt{background:#000}
-html,body{overflow-x:clip}
-body{margin:0;font-family:system-ui,sans-serif;color:var(--fg);line-height:1.6}main{font-size:clamp(1.1rem,1.6vw,1.35rem)}
-a{color:var(--nismo)}a:hover{color:var(--nismo-hover)}
-nav{position:sticky;top:0;z-index:9;display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:.5rem 1rem;padding:.7rem 1.2rem;background:#000;max-width:100%}
-nav a{color:var(--fg);text-decoration:none;font-weight:600}nav a:hover{color:var(--nismo)}
-.brand{justify-self:start;font-weight:900;font-size:1.8rem;margin:0;line-height:1.1}.brand span{color:var(--nismo)}
-.nav-links{grid-column:2;justify-self:center;display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:.35rem 1.15rem;min-width:0}
-.nav-links a{font-size:1.35rem}
-.nav-social{grid-column:3;justify-self:end;display:flex;align-items:center;gap:.85rem}.nav-social a{margin:0}
-.banner{position:relative;background:#000;line-height:0}.banner img{display:block;width:100%;height:auto}
-.banner::before,.banner::after{content:"";position:absolute;left:0;right:0;z-index:1;pointer-events:none}
-.banner::before{top:0;height:min(24px,2%);background:linear-gradient(to bottom,rgba(0,0,0,.6),transparent)}
-.banner::after{bottom:0;height:28%;background:linear-gradient(to bottom,transparent 0%,transparent 48%,rgba(0,0,0,.4) 70%,#000 100%)}
-.hero{min-height:auto;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:3rem 1rem}
-.hero h1{font-size:clamp(2.8rem,10vw,6rem);margin:.2rem 0;letter-spacing:.04em;font-weight:900;color:var(--nismo);text-shadow:0 3px 0 #000}
-h2{color:var(--nismo)}
-.kicker{text-transform:uppercase;letter-spacing:.3em;color:var(--nismo);font-size:.85rem}.tagline{max-width:640px;font-size:1.15rem;margin:.5rem auto}.when{font-size:1.3rem;font-weight:700}
-.hero-mid{display:flex;align-items:center;gap:1.4rem;width:min(980px,100%);margin:.4rem auto .2rem;text-align:left}
-.dragon,.us129{width:170px;height:auto;flex:none}
-.hero-copy{min-width:0}.hero-copy p{margin:.3rem 0}.hero-copy .tagline{margin:.2rem 0 .4rem;max-width:none}
-#countdown{display:flex;gap:.8rem;margin:1.5rem 0;flex-wrap:wrap;justify-content:center}#countdown div{background:#0008;border:2px solid var(--nismo);border-radius:10px;padding:.8rem;min-width:80px}
-#countdown b{display:block;font-size:clamp(1.8rem,7vw,3rem);font-variant-numeric:tabular-nums;color:var(--nismo)}#countdown small{text-transform:uppercase;letter-spacing:.15em;font-size:.7rem;color:var(--fg)}
-.live{font-size:2rem;font-weight:900;color:var(--nismo)}
-.btn{display:inline-block;background:var(--nismo);color:#fff;font-weight:800;font-size:1rem;padding:.85rem 1.6rem;border-radius:999px;text-decoration:none;text-transform:uppercase;letter-spacing:.05em}
-.btn:hover{background:var(--nismo-hover);color:#fff}
-section{max-width:min(1200px,100%);width:100%;margin:auto;padding:4rem 1.2rem}section.alt{max-width:none;text-align:center}section p{max-width:min(1200px,100%);margin:1rem auto}
-h2{font-size:2rem;text-transform:uppercase;border-left:6px solid var(--nismo);padding-left:.6rem;display:inline-block}
-.marquee{position:relative;overflow:hidden;margin-top:1.5rem;width:100vw;margin-left:calc(50% - 50vw);-webkit-mask-image:linear-gradient(to right,transparent,#000 10%,#000 90%,transparent);mask-image:linear-gradient(to right,transparent,#000 10%,#000 90%,transparent)}
-.marquee-track{display:flex;width:max-content;animation:marquee 35s linear infinite}
-.marquee:hover .marquee-track,.marquee.is-paused .marquee-track{animation-play-state:paused}
-.shot{padding:0;border:0;background:none;cursor:zoom-in;flex:none;line-height:0}
-.lb{position:fixed;inset:0;z-index:50;display:flex;align-items:center;justify-content:center;background:#000e;padding:3.5rem 4.5rem}
-.lb[hidden]{display:none}
-.lb img{max-width:min(92vw,1600px);max-height:86vh;width:auto;height:auto;object-fit:contain}
-.lb-x,.lb-prev,.lb-next{position:absolute;z-index:2;width:44px;height:44px;border:0;border-radius:999px;background:#000c;color:#fff;font-size:1.8rem;line-height:1;cursor:pointer}
-.lb-x{top:1rem;right:1rem}.lb-prev{left:1rem;top:50%;transform:translateY(-50%)}.lb-next{right:1rem;top:50%;transform:translateY(-50%)}
-.lb-x:hover,.lb-prev:hover,.lb-next:hover{color:var(--nismo)}
-.lb-x:focus-visible,.lb-prev:focus-visible,.lb-next:focus-visible{outline:2px solid var(--nismo);outline-offset:2px}
-.marquee-set{display:flex;gap:1rem;padding-right:1rem}
-.marquee img{height:200px;width:auto;flex:none;border-radius:8px}
-@keyframes marquee{from{transform:translateX(0)}to{transform:translateX(-50%)}}
-.fb,.ig{display:inline-flex;vertical-align:middle}.nav-social a:hover,footer .fb:hover,footer .ig:hover{opacity:.82}
-.btn-fb,.btn-ig{color:#fff;display:inline-flex;align-items:center;gap:.5rem;margin:.5rem}
-.btn-fb svg,.btn-ig svg{flex:none;box-shadow:0 0 0 2px #fff}
-.btn-fb svg{border-radius:50%}.btn-ig svg{border-radius:5px}
-.btn-fb{background:#1877f2}.btn-fb:hover{background:#0d65d9;color:#fff}
-.btn-ig{background:#E1306C}.btn-ig:hover{background:#c4215a;color:#fff}
-footer{display:grid;grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);align-items:center;gap:.75rem 1rem;text-align:center;padding:2rem 1.2rem;color:var(--fg);font-size:.9rem;background:#000a}
-.foot-copy{grid-column:2;margin:0}
-.to-top{grid-column:3;justify-self:end;display:inline-flex;align-items:center;gap:.4rem;margin:0;border:0;border-radius:999px;background:var(--nismo);color:#fff;font:inherit;font-weight:800;padding:.75rem 1.3rem;cursor:pointer}
-.to-top:hover{background:var(--nismo-hover)}
-.to-top:focus-visible{outline:2px solid #fff;outline-offset:3px}
-.toast{position:fixed;z-index:40;left:50%;bottom:1.2rem;transform:translateX(-50%);max-width:min(92vw,28rem);background:var(--nismo);color:#fff;font-weight:700;font-size:.95rem;line-height:1.3;text-align:center;padding:.6rem 1rem;border-radius:12px;box-shadow:0 8px 24px #0008}
-.toast[hidden]{display:none}
-@media(max-width:760px){footer{grid-template-columns:1fr}.foot-copy{grid-column:1;grid-row:1}.to-top{grid-column:1;grid-row:2;justify-self:end}}
-@media(max-width:600px){nav{grid-template-columns:1fr auto}.brand{font-size:1.4rem}.nav-links{grid-column:1 / -1;grid-row:2;gap:.35rem .7rem}.nav-links a{font-size:1.05rem}.nav-social{grid-column:2;grid-row:1}.hero-mid{flex-wrap:wrap;justify-content:center;gap:.75rem}.dragon,.us129{width:100px}.hero-copy{flex:1 1 100%;text-align:center}.hero-copy .tagline,.hero-copy p{text-align:center}.hero-copy .tagline{font-size:1rem}.marquee img{height:150px}}
-@media(prefers-reduced-motion:reduce){.marquee-track{animation:none}.marquee{overflow-x:auto}.marquee-set[aria-hidden="true"]{display:none}}
-</style>
-</body></html>
+</Base>

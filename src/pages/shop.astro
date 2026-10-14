@@ -1,0 +1,16 @@
+---
+import Base from '../layouts/Base.astro';
+import { event } from '../config';
+import { fbIcon, igIcon } from '../icons';
+---
+<Base title={`Shop | ${event.name}`}>
+<main>
+<section class="alt">
+<h2>SHOP</h2>
+<p class="shop-lead">Merch coming soon!</p>
+<p>Official {event.name} gear is on the way. Follow us for the drop.</p>
+<a class="btn btn-fb" href={event.facebookUrl} target="_blank" rel="noopener"><Fragment set:html={fbIcon} /> Join the Facebook group</a>
+<a class="btn btn-ig" href={event.instagramUrl} target="_blank" rel="noopener"><Fragment set:html={igIcon('ig-btn')} /> Follow on Instagram</a>
+</section>
+</main>
+</Base>
