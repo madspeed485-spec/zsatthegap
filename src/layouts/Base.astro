@@ -18,7 +18,7 @@ const base = import.meta.env.BASE_URL.endsWith('/') ? import.meta.env.BASE_URL :
 {description && <meta property="og:description" content={description} />}
 </head>
 <body>
-<nav><a href={`${base}#top`} class="brand">Z’s<span>@</span>the Gap</a><div class="nav-links"><a href={`${base}#event`}>Event</a><a href={`${base}#stay`}>Stay</a><a href={`${base}#gallery`}>Gallery</a><a href={`${base}shop/`}>Shop</a><a href={`${base}#contact`}>Contact</a></div><div class="nav-social"><a class="fb" href={event.facebookUrl} target="_blank" rel="noopener" aria-label="Facebook group" set:html={fbIcon} /><a class="ig" href={event.instagramUrl} target="_blank" rel="noopener" aria-label="Instagram" set:html={igIcon('ig-nav')} /></div></nav>
+<nav><a href="/" class="brand" aria-label={`${event.name} home`}>Z’s<span>@</span>the Gap</a><div class="nav-links"><a href={`${base}#event`}>Event</a><a href={`${base}#stay`}>Stay</a><a href={`${base}#gallery`}>Gallery</a><a href={`${base}shop/`}>Shop</a><a href={`${base}#contact`}>Contact</a></div><div class="nav-social"><a class="fb" href={event.facebookUrl} target="_blank" rel="noopener" aria-label="Facebook group" set:html={fbIcon} /><a class="ig" href={event.instagramUrl} target="_blank" rel="noopener" aria-label="Instagram" set:html={igIcon('ig-nav')} /></div></nav>
 <slot />
 <footer><p class="foot-copy">© {new Date().getFullYear()} {event.name} · zsatthegap.com · <a class="fb" href={event.facebookUrl} target="_blank" rel="noopener" aria-label="Facebook group" set:html={fbIcon} /> <a class="ig" href={event.instagramUrl} target="_blank" rel="noopener" aria-label="Instagram" set:html={igIcon('ig-footer')} /></p><button type="button" class="to-top" id="to-top">↑ Back to top</button></footer>
 <div id="copy-toast" class="toast" hidden role="status" aria-live="polite"></div>
@@ -77,7 +77,7 @@ body{margin:0;font-family:system-ui,sans-serif;color:var(--fg);line-height:1.6}m
 a{color:var(--nismo)}a:hover{color:var(--nismo-hover)}
 nav{position:sticky;top:0;z-index:9;display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:.5rem 1rem;padding:.7rem 1.2rem;background:#000;max-width:100%}
 nav a{color:var(--fg);text-decoration:none;font-weight:600}nav a:hover{color:var(--nismo)}
-.brand{justify-self:start;font-weight:900;font-size:1.8rem;margin:0;line-height:1.1}.brand span{color:var(--nismo)}
+.brand{justify-self:start;font-weight:900;font-size:1.8rem;margin:0;line-height:1.1;cursor:pointer;text-decoration:none;color:var(--fg)}.brand span{color:var(--nismo)}.brand:hover{color:var(--fg);opacity:.82}
 .nav-links{grid-column:2;justify-self:center;display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:.35rem 1.15rem;min-width:0}
 .nav-links a{font-size:1.35rem}
 .nav-social{grid-column:3;justify-self:end;display:flex;align-items:center;gap:.85rem}.nav-social a{margin:0}
