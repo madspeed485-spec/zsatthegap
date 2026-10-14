@@ -10,6 +10,7 @@ export const event = {
   dragonUrl: "https://tailofthedragon.com",
   // Hotel block: Sept 29 – Oct 4, 2027, group code ZATG27
   hotelName: "Fontana Village Resort",
+  hotelSiteUrl: "https://fontanavillage.com/",
   hotelUrl: "https://fontanavillage.ibe.stayntouch.com/search-results?checkin=09-29-2027&checkout=10-04-2027&adults=1&kids=0&groupCode=ZATG27",
   hotelGroupCode: "ZATG27",
   hotelBlockDates: "Sept 29 – Oct 4, 2027",
