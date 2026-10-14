@@ -16,6 +16,12 @@ const base = import.meta.env.BASE_URL.endsWith('/') ? import.meta.env.BASE_URL :
 {description && <meta name="description" content={description} />}
 <meta property="og:title" content={title} />
 {description && <meta property="og:description" content={description} />}
+<script is:inline>
+if (location.hash === '#top') {
+  history.replaceState(null, '', location.pathname + location.search);
+  window.__clearedTopHash = true;
+}
+</script>
 </head>
 <body>
 <nav><a href="/" class="brand" aria-label={`${event.name} home`}>Z’s<span>@</span>the Gap</a><div class="nav-links"><a href={`${base}#event`}>Event</a><a href={`${base}#stay`}>Stay</a><a href={`${base}#gallery`}>Gallery</a><a href={`${base}shop/`}>Shop</a><a href={`${base}#contact`}>Contact</a></div><div class="nav-social"><a class="fb" href={event.facebookUrl} target="_blank" rel="noopener" aria-label="Facebook group" set:html={fbIcon} /><a class="ig" href={event.instagramUrl} target="_blank" rel="noopener" aria-label="Instagram" set:html={igIcon('ig-nav')} /></div></nav>
@@ -23,10 +29,26 @@ const base = import.meta.env.BASE_URL.endsWith('/') ? import.meta.env.BASE_URL :
 <footer><p class="foot-copy">© {new Date().getFullYear()} {event.name} · zsatthegap.com · <a class="fb" href={event.facebookUrl} target="_blank" rel="noopener" aria-label="Facebook group" set:html={fbIcon} /> <a class="ig" href={event.instagramUrl} target="_blank" rel="noopener" aria-label="Instagram" set:html={igIcon('ig-footer')} /></p><button type="button" class="to-top" id="to-top">↑ Back to top</button></footer>
 <div id="copy-toast" class="toast" hidden role="status" aria-live="polite"></div>
 <script>
-document.getElementById('to-top').addEventListener('click', () => {
+function scrollPageTop() {
   const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
   window.scrollTo({ top: 0, behavior: reduce ? 'auto' : 'smooth' });
+  if (location.hash) history.replaceState(null, '', location.pathname + location.search);
+}
+document.getElementById('to-top').addEventListener('click', scrollPageTop);
+document.querySelector('.brand').addEventListener('click', (e) => {
+  e.preventDefault();
+  const path = location.pathname.replace(/\/+$/, '') || '/';
+  if (path === '/') {
+    scrollPageTop();
+    history.replaceState(null, '', '/' + location.search);
+    return;
+  }
+  location.assign('/');
 });
+if (window.__clearedTopHash) {
+  window.scrollTo(0, 0);
+  window.addEventListener('load', () => window.scrollTo(0, 0));
+}
 </script>
 <script>
 const toast = document.getElementById('copy-toast');
