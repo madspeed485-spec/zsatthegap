@@ -29,9 +29,10 @@ const extras = galleryFiles
   .map((file) => ({ src: file.src, alt: undefined }));
 const imgs = [...fromData, ...extras];
 const gallery = [{ src: hero }, ...imgs];
-const photos = await Promise.all(gallery.map(async (item) => {
+const photos = await Promise.all(gallery.map(async (item, i) => {
   const large = await getImage({ src: item.src, width: 2400 });
-  return { src: item.src, full: large.src, alt: item.alt };
+  const alt = item.alt?.trim() || `${event.name} photo ${i + 1} of ${gallery.length}`;
+  return { src: item.src, full: large.src, alt };
 }));
 const base = import.meta.env.BASE_URL.endsWith('/') ? import.meta.env.BASE_URL : `${import.meta.env.BASE_URL}/`;
 ---
@@ -66,7 +67,7 @@ const base = import.meta.env.BASE_URL.endsWith('/') ? import.meta.env.BASE_URL :
 <div class="marquee">
   <div class="marquee-track">
     <div class="marquee-set">
-      {photos.map((p, i) => <button type="button" class="shot" data-i={i} data-full={p.full} aria-label={p.alt ?? `${event.name} photo ${i + 1} of ${photos.length}`}><Image src={p.src} alt={p.alt ?? ''} width={600} /></button>)}
+      {photos.map((p, i) => <button type="button" class="shot" data-i={i} data-full={p.full} aria-label={p.alt}><Image src={p.src} alt={p.alt} width={600} /></button>)}
     </div>
     <div class="marquee-set" aria-hidden="true">
       {photos.map((p, i) => <button type="button" class="shot" tabindex="-1" data-i={i} data-full={p.full}><Image src={p.src} alt="" width={600} /></button>)}

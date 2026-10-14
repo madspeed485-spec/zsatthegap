@@ -1,27 +1,35 @@
 [
   {
-    "image": "src/images/gallery/5296914.jpg"
+    "image": "src/images/gallery/5296914.jpg",
+    "alt": "Black Nissan Z on a winding mountain road in fall"
   },
   {
-    "image": "src/images/gallery/dragon-map.png"
+    "image": "src/images/gallery/dragon-map.png",
+    "alt": "Map of the Tail of the Dragon route on US 129"
   },
   {
-    "image": "src/images/gallery/z350-dragon-curve.jpg"
+    "image": "src/images/gallery/z350-dragon-curve.jpg",
+    "alt": "Blue Nissan 350Z on a curve of the Tail of the Dragon"
   },
   {
-    "image": "src/images/gallery/z350-dragon-statue.jpg"
+    "image": "src/images/gallery/z350-dragon-statue.jpg",
+    "alt": "Blue Nissan 350Z parked beside the dragon statue on the Tail of the Dragon"
   },
   {
-    "image": "src/images/gallery/nismo-z-side.jpg"
+    "image": "src/images/gallery/nismo-z-side.jpg",
+    "alt": "Gray Nissan Z Nismo side profile on a mountain road"
   },
   {
-    "image": "src/images/gallery/us129-north-sign.jpg"
+    "image": "src/images/gallery/us129-north-sign.jpg",
+    "alt": "Tail of the Dragon sign for US 129 North at Deals Gap"
   },
   {
-    "image": "src/images/gallery/fontana-dam-overlook.jpg"
+    "image": "src/images/gallery/fontana-dam-overlook.jpg",
+    "alt": "View from the Fontana Dam overlook across the lake and mountains"
   },
   {
-    "image": "src/images/gallery/z-lineup-fontana-dam.jpg"
+    "image": "src/images/gallery/z-lineup-fontana-dam.jpg",
+    "alt": "Line of Nissan Z cars on Fontana Dam"
   },
   {
     "image": "src/images/gallery/gallery-10.jpg",
