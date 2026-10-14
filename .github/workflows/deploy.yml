@@ -17,13 +17,3 @@ jobs:
     steps:
       - id: deployment
         uses: actions/deploy-pages@v4
-      # Actions deploys ignore a CNAME file. The workflow token has pages:write;
-      # the cloud-agent token cannot update Pages settings.
-      - name: Set custom domain
-        env:
-          GH_TOKEN: ${{ github.token }}
-        run: |
-          gh api --method PUT -H "Accept: application/vnd.github+json" \
-            "/repos/${{ github.repository }}/pages" \
-            -f cname='zsatthegap.com' \
-            --jq '{cname,html_url,https_enforced}'
