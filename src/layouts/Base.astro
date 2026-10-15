@@ -105,8 +105,9 @@ nav a{color:var(--fg);text-decoration:none;font-weight:600}nav a:hover{color:var
 .nav-links{grid-column:2;justify-self:center;display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:.35rem 1.15rem;min-width:0}
 .nav-links a{font-size:1.35rem}
 .nav-social{grid-column:3;justify-self:end;display:flex;align-items:center;gap:.85rem}.nav-social a{margin:0}
-.banner{background:#000;line-height:0}
+.banner{position:relative;background:#000;line-height:0}
 .banner-photo{display:block;width:100%;height:auto}
+.banner::after{content:"";position:absolute;left:0;right:0;bottom:0;z-index:1;height:18%;pointer-events:none;background:linear-gradient(to bottom,transparent 0%,transparent 55%,rgba(0,0,0,.45) 78%,#000 100%)}
 .hero{min-height:auto;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:0 1rem 2.2rem}
 .hero h1{font-size:clamp(2.8rem,10vw,6rem);margin:.2rem 0;letter-spacing:.04em;font-weight:900;color:var(--nismo);text-shadow:0 3px 0 #000}
 h2{color:var(--nismo)}
