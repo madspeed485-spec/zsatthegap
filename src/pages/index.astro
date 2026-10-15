@@ -5,7 +5,7 @@ import { event } from '../config';
 import { fbIcon, igIcon } from '../icons';
 import galleryEntries from '../content/gallery.json';
 import hero from '../images/hero.png';
-import heroPhoto from '../images/hero/hero-z-nismo-350z.jpg';
+import heroCombined from '../images/hero/zs-hero-combined.jpg';
 import dragon from '../images/dragon-129.png';
 import us129 from '../images/us129-dragon.png';
 const galleryModules = import.meta.glob<{ default: ImageMetadata }>('../images/gallery/*.{jpg,jpeg,png,webp}', { eager: true });
@@ -39,13 +39,7 @@ const base = import.meta.env.BASE_URL.endsWith('/') ? import.meta.env.BASE_URL :
 ---
 <Base title={`${event.name} | Yearly Nissan Z Gathering at the Tail of the Dragon`} description={`${event.name}: the yearly Nissan Z car event at the Tail of the Dragon, Deals Gap.`}>
 <div class="banner">
-  <div class="banner-frame">
-    <Image class="banner-photo" src={heroPhoto} alt="Gray Nissan Z Nismo leading a blue 350Z on the Tail of the Dragon" widths={[640, 960, 1280, 1600, 1920, 2400]} sizes="100vw" loading="eager" fetchpriority="high" />
-    <img class="banner-logo" src={`${base}hero/hero-zs-at-the-gap-logo.png`} alt="Z’s at the Gap" width="552" height="315" />
-  </div>
-  <div class="banner-band">
-    <img class="banner-dates" src={`${base}hero/hero-fontana-village-oct-2027.png`} alt="Fontana Village, October 1–3, 2027" width="1504" height="91" />
-  </div>
+  <Image class="banner-photo" src={heroCombined} alt="Z’s at the Gap, Fontana Village Oct 1–3, 2027 — gray Nissan Z Nismo and blue 350Z on the Tail of the Dragon" widths={[640, 960, 1280, 1600, 2000, 3000]} sizes="100vw" loading="eager" fetchpriority="high" />
 </div>
 <header class="hero">
   <p class="kicker">Nissan Z · 318 curves · one weekend</p>
