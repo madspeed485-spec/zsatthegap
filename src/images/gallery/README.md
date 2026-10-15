@@ -1,1 +1,1 @@
-Drop event photos (.jpg/.png/.webp) here; they appear in the gallery automatically.
+Gallery photos are the files listed in src/content/gallery.json, in that order. A file in this folder that is not listed there is not shown.

@@ -4,35 +4,23 @@ import Base from '../layouts/Base.astro';
 import { event } from '../config';
 import { fbIcon, igIcon } from '../icons';
 import galleryEntries from '../content/gallery.json';
-import hero from '../images/hero.png';
 import heroCombined from '../images/hero/zs-hero-combined.jpg';
 import dragon from '../images/dragon-129.png';
 import us129 from '../images/us129-dragon.png';
 const galleryModules = import.meta.glob<{ default: ImageMetadata }>('../images/gallery/*.{jpg,jpeg,png,webp}', { eager: true });
 const fileName = (path: string) => path.split('/').pop()!.toLowerCase();
-const galleryFiles = Object.entries(galleryModules).map(([path, mod]) => ({
-  name: fileName(path),
-  src: mod.default,
-}));
-const galleryByName = new Map(galleryFiles.map((file) => [file.name, file]));
-const listed = new Set<string>();
-const fromData = galleryEntries.flatMap((entry) => {
+const galleryByName = new Map(Object.entries(galleryModules).map(([path, mod]) => [fileName(path), mod.default]));
+const seen = new Set<string>();
+const gallery = galleryEntries.flatMap((entry) => {
   const name = fileName(entry.image || '');
-  const file = galleryByName.get(name);
-  if (!name || !file || listed.has(name)) return [];
-  listed.add(name);
-  const alt = entry.alt?.trim();
-  return [{ src: file.src, alt: alt || undefined }];
+  const src = galleryByName.get(name);
+  if (!name || !src || seen.has(name)) return [];
+  seen.add(name);
+  return [{ src, alt: entry.alt?.trim() || '' }];
 });
-const extras = galleryFiles
-  .filter((file) => !listed.has(file.name))
-  .sort((a, b) => a.name.localeCompare(b.name))
-  .map((file) => ({ src: file.src, alt: undefined }));
-const imgs = [...fromData, ...extras];
-const gallery = [{ src: hero }, ...imgs];
 const photos = await Promise.all(gallery.map(async (item, i) => {
   const large = await getImage({ src: item.src, width: 2400 });
-  const alt = item.alt?.trim() || `${event.name} photo ${i + 1} of ${gallery.length}`;
+  const alt = item.alt || `${event.name} photo ${i + 1} of ${gallery.length}`;
   return { src: item.src, full: large.src, alt };
 }));
 const base = import.meta.env.BASE_URL.endsWith('/') ? import.meta.env.BASE_URL : `${import.meta.env.BASE_URL}/`;
