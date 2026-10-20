@@ -26,7 +26,7 @@ if (location.hash === '#top') {
 <body>
 <nav><a href="/" class="brand" aria-label={`${event.name} home`}>Z’s<span>@</span>the Gap</a><div class="nav-links"><a href={`${base}#event`}>Event</a><a href={`${base}#stay`}>Stay</a><a href={`${base}#gallery`}>Gallery</a><a href={`${base}shop/`}>Shop</a><a href={`${base}#contact`}>Contact</a></div><div class="nav-social"><a class="fb" href={event.facebookUrl} target="_blank" rel="noopener" aria-label="Facebook group" set:html={fbIcon} /><a class="ig" href={event.instagramUrl} target="_blank" rel="noopener" aria-label="Instagram" set:html={igIcon('ig-nav')} /></div></nav>
 <slot />
-<footer><p class="foot-copy">© {new Date().getFullYear()} {event.name} · zsatthegap.com · <a class="fb" href={event.facebookUrl} target="_blank" rel="noopener" aria-label="Facebook group" set:html={fbIcon} /> <a class="ig" href={event.instagramUrl} target="_blank" rel="noopener" aria-label="Instagram" set:html={igIcon('ig-footer')} /></p><button type="button" class="to-top" id="to-top">↑ Back to top</button></footer>
+<footer><div class="foot-copy"><p>© {new Date().getFullYear()} {event.name} · zsatthegap.com · <a class="fb" href={event.facebookUrl} target="_blank" rel="noopener" aria-label="Facebook group" set:html={fbIcon} /> <a class="ig" href={event.instagramUrl} target="_blank" rel="noopener" aria-label="Instagram" set:html={igIcon('ig-footer')} /></p><p class="foot-credit">Site by <a href="https://tnt8concepts.com" target="_blank" rel="noopener">T&amp;T 8 Concepts</a></p></div><button type="button" class="to-top" id="to-top">↑ Back to top</button></footer>
 <div id="copy-toast" class="toast" hidden role="status" aria-live="polite"></div>
 <script>
 function scrollPageTop() {
@@ -149,7 +149,7 @@ h2{font-size:2rem;text-transform:uppercase;border-left:6px solid var(--nismo);pa
 .btn-fb{background:#1877f2}.btn-fb:hover{background:#0d65d9;color:#fff}
 .btn-ig{background:#E1306C}.btn-ig:hover{background:#c4215a;color:#fff}
 footer{display:grid;grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);align-items:center;gap:.75rem 1rem;text-align:center;padding:2rem 1.2rem;color:var(--fg);font-size:.9rem;background:#000a}
-.foot-copy{grid-column:2;margin:0}
+.foot-copy{grid-column:2;margin:0}.foot-copy p{margin:0}.foot-credit{font-size:.78rem;color:#9a9a9a}.foot-copy .foot-credit{margin-top:.28rem}.foot-credit a{color:var(--nismo);text-decoration:none}.foot-credit a:hover{text-decoration:underline}
 .to-top{grid-column:3;justify-self:end;display:inline-flex;align-items:center;gap:.4rem;margin:0;border:0;border-radius:999px;background:var(--nismo);color:#fff;font:inherit;font-weight:800;padding:.75rem 1.3rem;cursor:pointer}
 .to-top:hover{background:var(--nismo-hover)}
 .to-top:focus-visible{outline:2px solid #fff;outline-offset:3px}
