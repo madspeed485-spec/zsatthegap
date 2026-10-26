@@ -34,7 +34,64 @@ function scrollPageTop() {
   window.scrollTo({ top: 0, behavior: reduce ? 'auto' : 'smooth' });
   if (location.hash) history.replaceState(null, '', location.pathname + location.search);
 }
-document.getElementById('to-top').addEventListener('click', scrollPageTop);
+const ZOOM_MS = 1050;
+let zoomScrollRaf = 0;
+let zoomRun = 0;
+function raceScroll(ms) {
+  cancelAnimationFrame(zoomScrollRaf);
+  const root = document.documentElement;
+  const start = window.scrollY;
+  root.style.scrollBehavior = 'auto';
+  if (start <= 0) {
+    root.style.scrollBehavior = '';
+    return;
+  }
+  const t0 = performance.now();
+  const frame = (now) => {
+    const p = Math.min(1, (now - t0) / ms);
+    const eased = p * p;
+    window.scrollTo(0, Math.round(start * (1 - eased)));
+    if (p < 1) zoomScrollRaf = requestAnimationFrame(frame);
+    else root.style.scrollBehavior = '';
+  };
+  zoomScrollRaf = requestAnimationFrame(frame);
+}
+function launchZoomCar() {
+  let car = document.getElementById('zoom-car');
+  if (!car) {
+    car = document.createElement('div');
+    car.id = 'zoom-car';
+    car.setAttribute('aria-hidden', 'true');
+    car.innerHTML = '<svg viewBox="0 0 40 80" xmlns="http://www.w3.org/2000/svg"><g fill="#1a1c20"><rect x="1" y="16" width="7" height="12" rx="2"/><rect x="32" y="16" width="7" height="12" rx="2"/><rect x="1" y="50" width="7" height="12" rx="2"/><rect x="32" y="50" width="7" height="12" rx="2"/></g><path fill="#8a8f96" d="M20 3c6 0 10 3 12 9 2 4 2 6 2 10v36c0 8-4 14-10 17h-8c-6-3-10-9-10-17V22c0-4 0-6 2-10 2-6 6-9 12-9z"/><path fill="#6e737a" d="M29 18c2 1 3 3 3 6v34c0 5-2 9-5 11V18z"/><path fill="#9aa0a8" d="M17 14h6l-1 24h-4z"/><rect x="19.2" y="14" width="1.6" height="22" fill="#C3002F"/><path fill="#2c3036" d="M13 40h14l-2 17H15z"/><path fill="#4a515a" d="M16 43h8l-1 10h-6z"/><rect x="11" y="8" width="5.2" height="2.8" rx="1" fill="#f3f6f8"/><rect x="23.8" y="8" width="5.2" height="2.8" rx="1" fill="#f3f6f8"/></svg><span class="streaks"></span>';
+    document.body.appendChild(car);
+  }
+  const btn = document.getElementById('to-top').getBoundingClientRect();
+  const w = car.offsetWidth || 20;
+  const h = car.offsetHeight || 40;
+  const left = Math.max(8, Math.min(window.innerWidth - w - 8, btn.left + btn.width / 2 - w / 2));
+  const top = Math.max(8, btn.top - h - 6);
+  car.style.left = left + 'px';
+  car.style.top = top + 'px';
+  car.style.setProperty('--zoom-travel', `${-(top + h + 12)}px`);
+  zoomRun += 1;
+  const run = zoomRun;
+  car.classList.remove('is-racing');
+  void car.offsetWidth;
+  car.classList.add('is-racing');
+  setTimeout(() => {
+    if (run !== zoomRun) return;
+    car.classList.remove('is-racing');
+  }, ZOOM_MS + 40);
+}
+document.getElementById('to-top').addEventListener('click', () => {
+  if (matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    scrollPageTop();
+    return;
+  }
+  launchZoomCar();
+  raceScroll(ZOOM_MS);
+  if (location.hash) history.replaceState(null, '', location.pathname + location.search);
+});
 document.querySelector('.brand').addEventListener('click', (e) => {
   e.preventDefault();
   const path = location.pathname.replace(/\/+$/, '') || '/';
@@ -153,10 +210,15 @@ footer{display:grid;grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);align
 .to-top{grid-column:3;justify-self:end;display:inline-flex;align-items:center;gap:.4rem;margin:0;border:0;border-radius:999px;background:var(--nismo);color:#fff;font:inherit;font-weight:800;padding:.75rem 1.3rem;cursor:pointer}
 .to-top:hover{background:var(--nismo-hover)}
 .to-top:focus-visible{outline:2px solid #fff;outline-offset:3px}
+#zoom-car{position:fixed;z-index:80;width:20px;height:40px;pointer-events:none;opacity:0}
+#zoom-car svg{display:block;width:100%;height:100%;overflow:visible}
+#zoom-car .streaks{position:absolute;left:50%;top:100%;width:70%;height:22px;transform:translateX(-50%);background:linear-gradient(rgba(255,255,255,0),rgba(255,255,255,.5)) 0 0/1.5px 100% no-repeat,linear-gradient(rgba(255,255,255,0),rgba(255,255,255,.28)) 50% 5px/1.5px 68% no-repeat,linear-gradient(rgba(255,255,255,0),rgba(255,255,255,.42)) 100% 2px/1.5px 84% no-repeat}
+#zoom-car.is-racing{animation:zoom-race 1.05s ease-in forwards}
+@keyframes zoom-race{0%{transform:translateY(0);opacity:1}78%{opacity:1}100%{transform:translateY(var(--zoom-travel));opacity:0}}
 .toast{position:fixed;z-index:40;left:50%;bottom:1.2rem;transform:translateX(-50%);max-width:min(92vw,28rem);background:var(--nismo);color:#fff;font-weight:700;font-size:.95rem;line-height:1.3;text-align:center;padding:.6rem 1rem;border-radius:12px;box-shadow:0 8px 24px #0008}
 .toast[hidden]{display:none}
 @media(max-width:760px){footer{grid-template-columns:1fr}.foot-copy{grid-column:1;grid-row:1}.to-top{grid-column:1;grid-row:2;justify-self:end}}
-@media(max-width:600px){nav{grid-template-columns:1fr auto}.brand{font-size:1.4rem}.nav-links{grid-column:1 / -1;grid-row:2;gap:.35rem .7rem}.nav-links a{font-size:1.05rem}.nav-social{grid-column:2;grid-row:1}.hero-mid{flex-wrap:wrap;justify-content:center;gap:.75rem}.dragon,.us129{width:100px}.hero-copy{flex:1 1 100%;text-align:center}.hero-copy .tagline,.hero-copy p{text-align:center}.hero-copy .tagline{font-size:1rem}.marquee img{height:150px}.qr-img{width:120px}#event,#stay,#gallery,#contact{scroll-margin-top:8.75rem}}
-@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}.marquee-track{animation:none}.marquee{overflow-x:auto}.marquee-set[aria-hidden="true"]{display:none}}
+@media(max-width:600px){nav{grid-template-columns:1fr auto}.brand{font-size:1.4rem}.nav-links{grid-column:1 / -1;grid-row:2;gap:.35rem .7rem}.nav-links a{font-size:1.05rem}.nav-social{grid-column:2;grid-row:1}.hero-mid{flex-wrap:wrap;justify-content:center;gap:.75rem}.dragon,.us129{width:100px}.hero-copy{flex:1 1 100%;text-align:center}.hero-copy .tagline,.hero-copy p{text-align:center}.hero-copy .tagline{font-size:1rem}.marquee img{height:150px}.qr-img{width:120px}#zoom-car{width:16px;height:32px}#event,#stay,#gallery,#contact{scroll-margin-top:8.75rem}}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}.marquee-track{animation:none}.marquee{overflow-x:auto}.marquee-set[aria-hidden="true"]{display:none}#zoom-car{display:none}}
 </style>
 </body></html>
