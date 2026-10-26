@@ -34,7 +34,11 @@ function scrollPageTop() {
   window.scrollTo({ top: 0, behavior: reduce ? 'auto' : 'smooth' });
   if (location.hash) history.replaceState(null, '', location.pathname + location.search);
 }
-const ZOOM_MS = 1050;
+// Car, scroll, and smoke all follow this one length.
+const ZOOM_MS = 2100;
+document.documentElement.style.setProperty('--zoom-ms', `${ZOOM_MS}ms`);
+document.documentElement.style.setProperty('--puff-ms', `${ZOOM_MS * 0.59}ms`);
+document.documentElement.style.setProperty('--puff-heavy-ms', `${ZOOM_MS * 0.714}ms`);
 let zoomScrollRaf = 0;
 let zoomRun = 0;
 function raceScroll(ms) {
@@ -99,7 +103,7 @@ function spawnPuff(x, y, side, heavy, scale) {
   document.body.appendChild(puff);
   const drop = () => puff.remove();
   puff.addEventListener('animationend', drop, { once: true });
-  setTimeout(drop, 860);
+  setTimeout(drop, ZOOM_MS * 0.82);
 }
 function smokeFrame(run, start, last) {
   if (run !== zoomRun) return;
@@ -107,7 +111,7 @@ function smokeFrame(run, start, last) {
   const t = (now - start) / ZOOM_MS;
   if (t > 1) return;
   const heavy = t < 0.38;
-  if (now - last >= (heavy ? 55 : 130)) {
+  if (now - last >= ZOOM_MS * (heavy ? 0.0524 : 0.1238)) {
     const car = document.getElementById('zoom-car');
     if (!car || !car.classList.contains('is-racing')) return;
     const r = car.getBoundingClientRect();
@@ -251,9 +255,9 @@ footer{display:grid;grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);align
 #zoom-car{position:fixed;z-index:80;width:20px;height:40px;pointer-events:none;opacity:0}
 #zoom-car svg{display:block;width:100%;height:100%;overflow:visible}
 #zoom-car .streaks{position:absolute;left:50%;top:100%;width:70%;height:22px;transform:translateX(-50%);background:linear-gradient(rgba(255,255,255,0),rgba(255,255,255,.5)) 0 0/1.5px 100% no-repeat,linear-gradient(rgba(255,255,255,0),rgba(255,255,255,.28)) 50% 5px/1.5px 68% no-repeat,linear-gradient(rgba(255,255,255,0),rgba(255,255,255,.42)) 100% 2px/1.5px 84% no-repeat}
-#zoom-car.is-racing{animation:zoom-race 1.05s ease-in forwards}
-.zoom-puff{position:fixed;z-index:79;pointer-events:none;border-radius:50%;background:radial-gradient(circle,rgba(255,255,255,.62) 0%,rgba(214,218,222,.32) 42%,rgba(176,180,184,0) 72%);filter:blur(1.4px);animation:zoom-puff .62s ease-out forwards}
-.zoom-puff.is-heavy{animation-duration:.75s;filter:blur(1.8px)}
+#zoom-car.is-racing{animation:zoom-race var(--zoom-ms) ease-in forwards}
+.zoom-puff{position:fixed;z-index:79;pointer-events:none;border-radius:50%;background:radial-gradient(circle,rgba(255,255,255,.62) 0%,rgba(214,218,222,.32) 42%,rgba(176,180,184,0) 72%);filter:blur(1.4px);animation:zoom-puff var(--puff-ms) ease-out forwards}
+.zoom-puff.is-heavy{animation-duration:var(--puff-heavy-ms);filter:blur(1.8px)}
 @keyframes zoom-puff{0%{opacity:.8;transform:translate(-50%,-50%) scale(.4)}100%{opacity:0;transform:translate(calc(-50% + var(--puff-x)),calc(-50% + var(--puff-y))) scale(1.65)}}
 @keyframes zoom-race{0%{transform:translateY(0);opacity:1}78%{opacity:1}100%{transform:translateY(var(--zoom-travel));opacity:0}}
 .toast{position:fixed;z-index:40;left:50%;bottom:1.2rem;transform:translateX(-50%);max-width:min(92vw,28rem);background:var(--nismo);color:#fff;font-weight:700;font-size:.95rem;line-height:1.3;text-align:center;padding:.6rem 1rem;border-radius:12px;box-shadow:0 8px 24px #0008}
